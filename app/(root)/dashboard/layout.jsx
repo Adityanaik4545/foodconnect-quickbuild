@@ -6,16 +6,17 @@ import { usePathname, useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { Skeleton } from '@/components/ui/skeleton';
 import { useState } from "react";
-import ListFoodForm from "./donor_panel/ListFoodForm";
+import ListFoodForm from "@/components/ListFoodForm";
 
 
 export default function DashboardLayout({ children }) {
-    const pathname = usePathname();
-    const router = useRouter();
-    const [showListFoodForm, setShowListFoodForm] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
+  const [showListFoodForm, setShowListFoodForm] = useState(false);
 
-    const { data: session } = useSession();
-    const user = session?.user;
+
+  const { data: session } = useSession();
+  const user = session?.user;
 
   return (
     <div className="h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
@@ -24,9 +25,9 @@ export default function DashboardLayout({ children }) {
         <aside className="w-72 bg-white border-r border-slate-200 shadow-sm flex flex-col">
           <div className="p-6 space-y-6">
             {/* Logo/Brand */}
-          <div className='mt-auto p-2 space-y-4 border-b border-slate-200'>
-            <Image src="/assets/logo/foodconnect_main.png" width={200} height={200} alt='logo' />
-          </div>
+            <div className='mt-auto p-2 space-y-4 border-b border-slate-200'>
+              <Image src="/assets/logo/foodconnect_main.png" width={200} height={200} alt='logo' />
+            </div>
 
 
             {/* Profile Card */}
@@ -45,14 +46,14 @@ export default function DashboardLayout({ children }) {
             {/* Navigation */}
             <nav className="space-y-2">
               <button
-              onClick={() => router.push("/dashboard/donor_panel")} 
-              className={navItemClass(pathname === "/dashboard/donor_panel")}>
-               <HomeIcon className="w-5 h-5" />
+                onClick={() => router.push("/dashboard/donor_panel")}
+                className={navItemClass(pathname === "/dashboard/donor_panel")}>
+                <HomeIcon className="w-5 h-5" />
                 Home
               </button>
-              <button 
-              onClick={() => router.push("/dashboard/donor_panel/my-food")} 
-              className={navItemClass(pathname.startsWith("/dashboard/donor_panel/my-food"))}>
+              <button
+                onClick={() => router.push("/dashboard/donor_panel/my-food")}
+                className={navItemClass(pathname.startsWith("/dashboard/donor_panel/my-food"))}>
                 <Menu className="w-5 h-5" />
                 My food
               </button>
@@ -69,34 +70,34 @@ export default function DashboardLayout({ children }) {
           <div className='mt-auto p-6 space-y-4 border-t border-slate-200'>
             <div className="mt-auto">
               {!user ? (
-                  <Skeleton className="h-12 w-full rounded-full bg-green-300" />
+                <Skeleton className="h-12 w-full rounded-full bg-green-300" />
               ) : (
 
-              <button
-                onClick={() => router.push("/dashboard/donor_panel/profile")}
-                className="
+                <button
+                  onClick={() => router.push("/dashboard/donor_panel/profile")}
+                  className="
                 w-full flex items-center gap-3
                 border border-emerald-100
                 cursor-pointer
                 rounded-full bg-emerald-50 px-4 py-3
                 hover:bg-emerald-100 transition-colors
                "
-              >
-                {/* Avatar */}
-                <div className="h-10 w-10 flex items-center justify-center rounded-full bg-black text-white font-semibold">
-                  {user?.name?.charAt(0).toUpperCase() || "!"}
-                </div>
+                >
+                  {/* Avatar */}
+                  <div className="h-10 w-10 flex items-center justify-center rounded-full bg-black text-white font-semibold">
+                    {user?.name?.charAt(0).toUpperCase() || "!"}
+                  </div>
 
-                {/* Name + Email */}
-                <div className="flex flex-col text-left leading-tight overflow-hidden">
-                  <span className="text-sm font-semibold text-slate-800">
-                    {user?.name || "Set your Profile"}
-                  </span>
-                  <span className="text-xs text-slate-500 truncate">
-                    {user?.email}
-                  </span>
-                </div>
-              </button>
+                  {/* Name + Email */}
+                  <div className="flex flex-col text-left leading-tight overflow-hidden">
+                    <span className="text-sm font-semibold text-slate-800">
+                      {user?.name || "Set your Profile"}
+                    </span>
+                    <span className="text-xs text-slate-500 truncate">
+                      {user?.email}
+                    </span>
+                  </div>
+                </button>
               )}
             </div>
             {/* <button 
@@ -109,12 +110,13 @@ export default function DashboardLayout({ children }) {
           </div>
         </aside>
 
-    <main className="flex-1 p-8 overflow-y-auto">
-      {children}
-    </main>
+        <main className="flex-1 p-8 overflow-y-auto">
+          {children}
+        </main>
         <button
-        onClick={() => setShowListFoodForm(true)}
-      className="
+          onClick={() => setShowListFoodForm(true)}
+
+          className="
         fixed bottom-6 right-20 z-50
         flex items-center gap-2
         rounded-full px-6 py-2
@@ -124,17 +126,19 @@ export default function DashboardLayout({ children }) {
         hover:from-emerald-700 hover:to-emerald-500
         transition-all duration-300
       "
-    >
-      <span className="text-xl">+</span>
-      List Food
-    </button>
-
-    {showListFoodForm && (
+        >
+          <span className="text-xl">+</span>
+          List Food
+        </button>
+      </div>
+                {showListFoodForm && (
             <ListFoodForm
-              onClose={() => setShowListFoodForm(false)}
+              onClose={() => {
+                setShowListFoodForm(false);
+                loadDonations();
+              }}
             />
           )}
-      </div>
     </div>
   );
 }
