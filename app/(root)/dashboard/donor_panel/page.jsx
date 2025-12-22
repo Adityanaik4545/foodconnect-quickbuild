@@ -80,7 +80,7 @@ export default function DonorDashboard() {
       hour: '2-digit',
       minute: '2-digit'
     });
-  };
+  };1
 
   // Calculate stats
   const totalDonations = donations.length;
