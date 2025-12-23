@@ -76,29 +76,6 @@ export default function ReceiverProfile() {
     <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
       <div className="flex min-h-screen">
         {/* Sidebar - Same as receiver dashboard */}
-        <aside className="w-72 bg-white border-r border-slate-200 shadow-sm flex flex-col">
-          <div className="p-6 space-y-6">
-            <div className="flex items-center gap-3 pb-6 border-b border-slate-200">
-              <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-amber-600 rounded-xl flex items-center justify-center shadow-lg">
-                <User className="w-6 h-6 text-white" />
-              </div>
-              <div>
-                <h1 className="font-bold text-lg text-slate-900">FoodConnect</h1>
-                <p className="text-xs text-slate-500">Receiver Portal</p>
-              </div>
-            </div>
-
-            <nav className="space-y-2">
-              <button 
-                onClick={() => router.push('/dashboard/receiver_panel')}
-                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 font-medium transition-all hover:bg-slate-100"
-              >
-                <ArrowLeft className="w-5 h-5" />
-                Back to Dashboard
-              </button>
-            </nav>
-          </div>
-        </aside>
 
         {/* Main Content */}
         <main className="flex-1 p-8 overflow-y-auto">

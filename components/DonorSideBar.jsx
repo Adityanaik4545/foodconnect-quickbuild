@@ -9,7 +9,6 @@ import Image from 'next/image';
 const DonorSideBar = () => {
       const pathname = usePathname();
       const router = useRouter();
-
       const { data: session } = useSession();
   const user = session?.user;
 
@@ -19,20 +18,6 @@ const DonorSideBar = () => {
             <div className='mt-auto p-2 space-y-4 border-b border-slate-200'>
               <Image src="/assets/logo/foodconnect_main.png" width={200} height={200} alt='logo' />
             </div>
-
-
-            {/* Profile Card */}
-            {/* <div className="bg-gradient-to-br from-slate-50 to-white rounded-2xl p-5 border border-slate-200">
-              <div className="flex items-center gap-4">
-                <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-md">
-                  <User className="w-7 h-7 text-white" />
-                </div>
-                <div>
-                  <p className="font-semibold text-slate-900">Dashboard</p>
-                  <p className="text-xs text-slate-500">Donor Account</p>
-                </div>
-              </div>
-            </div> */}
 
             {/* Navigation */}
             <nav className="space-y-2">
@@ -57,7 +42,7 @@ const DonorSideBar = () => {
               </button>
             </nav>
           </div>
-          {/* Logout Button */}
+          {/* profile Button */}
           <div className='mt-auto p-6 space-y-4 border-t border-slate-200'>
             <div className="mt-auto">
               {!user ? (
