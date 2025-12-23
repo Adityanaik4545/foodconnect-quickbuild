@@ -2,37 +2,45 @@
 
 import { auth } from "@/lib/auth";
 import { db } from "@/drizzle/db";
-import { donation, acceptedDonation, userProfile, user } from "@/drizzle/schema";
+import { donation, acceptedDonation, userProfile, user as userTable} from "@/drizzle/schema";
+
 import { eq, desc, and, or } from "drizzle-orm";
 import { headers } from "next/headers";
 
 // Get all donations for a donor
 export async function getDonorDonations() {
   const reqHeaders = await headers();
-  const { user } = await auth.api.getSession({
-    headers: reqHeaders,
-  });
+  const { user } = await auth.api.getSession({ headers: reqHeaders });
 
   if (!user?.id) {
     throw new Error("Not authenticated");
   }
 
+  // 1️⃣ Get donor donations
   const donations = await db
     .select()
     .from(donation)
     .where(eq(donation.donorId, user.id))
     .orderBy(desc(donation.createdAt));
 
-  // Get all accepted donations to count acceptances for each donation
-  const allAccepted = await db
-    .select()
-    .from(acceptedDonation);
+  // 2️⃣ Get accepted donations WITH receiver info
+  const accepted = await db
+    .select({
+      donationId: acceptedDonation.donationId,
+      receiverId: acceptedDonation.receiverId,
+      receiverName: userTable.name,
+      receiverEmail: userTable.email,
+      acceptedAt: acceptedDonation.acceptedAt,
+    })
+    .from(acceptedDonation)
+    .leftJoin(userTable, eq(userTable.id, acceptedDonation.receiverId));
 
-  // Map donations with status
+  // 3️⃣ Merge data
   return donations.map((don) => {
-    const acceptedForThisDonation = allAccepted.filter(
-      (acc) => acc.donationId === don.donationId
+    const acceptedForDonation = accepted.filter(
+      (a) => a.donationId === don.donationId
     );
+
     return {
       id: don.donationId,
       mealName: don.mealName,
@@ -44,10 +52,19 @@ export async function getDonorDonations() {
       address: don.address,
       description: don.description,
       createdAt: don.createdAt,
-      acceptedCount: acceptedForThisDonation.length,
+
+      acceptedCount: acceptedForDonation.length,
+
+      // 🔥 NEW — donor can now see who accepted
+      acceptedBy: acceptedForDonation.map((a) => ({
+        name: a.receiverName,
+        email: a.receiverEmail,
+        acceptedAt: a.acceptedAt,
+      })),
     };
   });
 }
+
 
 // Get available donations for receivers
 export async function getAvailableDonations() {
@@ -82,8 +99,8 @@ export async function getAvailableDonations() {
   for (const donorId of donorIds) {
     const donorResult = await db
       .select()
-      .from(user)
-      .where(eq(user.id, donorId))
+      .from(userTable)
+      .where(eq(userTable.id, donorId))
       .limit(1);
     if (donorResult.length > 0) {
       donorMap.set(donorId, donorResult[0].name);
@@ -217,19 +234,23 @@ export async function acceptDonation(donationId: string) {
   }
 
   // Create accepted donation record
-  const accepted = await db
-    .insert(acceptedDonation)
-    .values({
-      donationId: donationId,
-      receiverId: user.id,
-      status: "accepted",
-    })
-    .returning();
+const accepted = await db
+  .insert(acceptedDonation)
+  .values({
+    donationId: donationId,
+    receiverId: user.id,
+    status: "accepted",
+  })
+  .returning();
 
-  // Update donation status if quantity is limited (optional logic)
-  // For now, we'll keep it available for others
+// 🔥 IMPORTANT: update donation status
+await db
+  .update(donation)
+  .set({ status: "accepted" })
+  .where(eq(donation.donationId, donationId));
 
-  return accepted[0];
+return accepted[0];
+
 }
 
 // Get accepted donations for a receiver
@@ -259,8 +280,8 @@ export async function getReceiverAcceptedDonations() {
   for (const donorId of donorIds) {
     const donorResult = await db
       .select()
-      .from(user)
-      .where(eq(user.id, donorId))
+      .from(userTable)
+      .where(eq(userTable.id, donorId))
       .limit(1);
     if (donorResult.length > 0) {
       donorMap.set(donorId, donorResult[0].name);

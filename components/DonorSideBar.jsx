@@ -40,6 +40,13 @@ const DonorSideBar = () => {
                 <User className="w-5 h-5" />
                 Nearby Request
               </button>
+              <button
+                onClick={() => router.push('/dashboard/donor_panel/accepted_request')}
+                className={navItemClass(pathname.startsWith("/dashboard/donor_panel/accepted_request"))}
+              >
+                <User className="w-5 h-5" />
+                Accepted Requests
+              </button>
             </nav>
           </div>
           {/* profile Button */}

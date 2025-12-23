@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { User, Phone, MapPin, Mail, ArrowLeft, Edit2, Save, X } from 'lucide-react';
+import { User, Phone, MapPin, Mail, ArrowLeft, Edit2, Save, X, LogOutIcon } from 'lucide-react';
 import { getUserProfile } from '@/app/actions/getUserProfile';
 import { useRouter } from 'next/navigation';
 import { updateUserProfile } from '@/app/actions/updateUserProfile';
+import { signOut } from '@/lib/auth-client';
 
 export default function DonorProfile() {
   const [profile, setProfile] = useState(null);
@@ -59,6 +60,15 @@ export default function DonorProfile() {
       address: profile?.address || '',
     });
     setIsEditing(false);
+  };
+
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.push('/login');
+    } catch (error) {
+      console.error('Error logging out:', error);
+    }
   };
 
   if (loading) {
@@ -116,33 +126,51 @@ export default function DonorProfile() {
                       </span>
                     </div>
                   </div>
-                  {!isEditing ? (
-                    <button
-                      onClick={() => setIsEditing(true)}
-                      className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-all"
-                    >
-                      <Edit2 className="w-5 h-5" />
-                      Edit Profile
-                    </button>
-                  ) : (
-                    <div className="flex items-center gap-2">
+                  <div className='flex flex-col gap-4'>
+                    {!isEditing ? (
                       <button
-                        onClick={handleCancel}
+                        onClick={() => setIsEditing(true)}
                         className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-all"
                       >
-                        <X className="w-5 h-5" />
-                        Cancel
+                        <Edit2 className="w-5 h-5" />
+                        Edit Profile
                       </button>
-                      <button
-                        onClick={handleSave}
-                        disabled={saving}
-                        className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-xl font-medium hover:bg-emerald-600 transition-all shadow-md disabled:opacity-50"
-                      >
-                        <Save className="w-5 h-5" />
-                        {saving ? 'Saving...' : 'Save Changes'}
-                      </button>
-                    </div>
-                  )}
+                    ) : (
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={handleCancel}
+                          className="flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-700 rounded-xl font-medium hover:bg-slate-200 transition-all"
+                        >
+                          <X className="w-5 h-5" />
+                          Cancel
+                        </button>
+                        <button
+                          onClick={handleSave}
+                          disabled={saving}
+                          className="flex items-center gap-2 px-4 py-2 bg-emerald-500 text-white rounded-xl font-medium hover:bg-emerald-600 transition-all shadow-md disabled:opacity-50"
+                        >
+                          <Save className="w-5 h-5" />
+                          {saving ? 'Saving...' : 'Save Changes'}
+                        </button>
+                      </div>
+                    )}
+                    <button
+                      onClick={() => handleLogout()}
+                      className="
+                      flex items-center justify-center gap-2
+                      w-full px-4 py-2
+                      rounded-xl
+                      border border-red-200
+                     bg-red-50
+                     text-red-600 font-medium
+                     hover:bg-red-100 hover:border-red-300
+                      transition-all duration-200
+  "
+                    >
+                      <LogOutIcon className="w-5 h-5" />
+                      Logout
+                    </button>
+                  </div>
                 </div>
 
                 {/* Profile Information */}
