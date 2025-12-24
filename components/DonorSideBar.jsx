@@ -34,13 +34,6 @@ const DonorSideBar = () => {
                 My food
               </button>
               <button
-                onClick={() => router.push('/dashboard/donor_panel/nearby')}
-                className={navItemClass(pathname.startsWith("/dashboard/donor_panel/nearby"))}
-              >
-                <User className="w-5 h-5" />
-                Nearby Request
-              </button>
-              <button
                 onClick={() => router.push('/dashboard/donor_panel/accepted_request')}
                 className={navItemClass(pathname.startsWith("/dashboard/donor_panel/accepted_request"))}
               >

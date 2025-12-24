@@ -406,3 +406,51 @@ export async function deleteDonation(donationId: string) {
   return { success: true };
 }
 
+export async function getDonorAcceptedRequests() {
+  const reqHeaders = await headers();
+  const { user } = await auth.api.getSession({ headers: reqHeaders });
+
+  if (!user?.id) throw new Error("Not authenticated");
+
+  const results = await db
+    .select({
+      acceptedId: acceptedDonation.acceptedId,
+      donationId: donation.donationId,
+      mealName: donation.mealName,
+      quantity: donation.quantity,
+      type: donation.type,
+      category: donation.category,
+      preparedTime: donation.preparedTime,
+      donationStatus: donation.status,
+
+      acceptedAt: acceptedDonation.acceptedAt,
+      pickedAt: acceptedDonation.pickedAt,
+      acceptedStatus: acceptedDonation.status,
+
+      receiverName: userTable.name,
+      receiverEmail: userTable.email,
+      receiverPhone: userProfile.phoneNumber,
+      receiverAddress: userProfile.address,
+
+      address: donation.address,
+      createdAt: donation.createdAt,
+    })
+    .from(donation)
+    .innerJoin(
+      acceptedDonation,
+        eq(acceptedDonation.donationId, donation.donationId)
+    )
+    .innerJoin(
+      userTable,
+      eq(userTable.id, acceptedDonation.receiverId)
+    )
+    .leftJoin(
+      userProfile,
+      eq(userProfile.userId, userTable.id)
+    )
+    .where(eq(donation.donorId, user.id))
+    .orderBy(desc(acceptedDonation.acceptedAt));
+
+  return results;
+}
+
