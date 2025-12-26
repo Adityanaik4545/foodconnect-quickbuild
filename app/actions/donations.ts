@@ -454,3 +454,36 @@ export async function getDonorAcceptedRequests() {
   return results;
 }
 
+export async function confirmPickup(acceptedId: string) {
+  const reqHeaders = await headers();
+  const { user } = await auth.api.getSession({ headers: reqHeaders });
+
+  if (!user?.id) {
+    throw new Error("Not authenticated");
+  }
+
+  // Update accepted donation
+  await db
+    .update(acceptedDonation)
+    .set({
+      pickedAt: new Date(),
+      status: "picked",
+    })
+    .where(eq(acceptedDonation.acceptedId, acceptedId));
+
+  // Get donationId
+  const [record] = await db
+    .select({ donationId: acceptedDonation.donationId })
+    .from(acceptedDonation)
+    .where(eq(acceptedDonation.acceptedId, acceptedId));
+
+  // Update donation status
+  await db
+    .update(donation)
+    .set({ status: "completed" })
+    .where(eq(donation.donationId, record.donationId));
+
+  return { success: true };
+}
+
+

@@ -11,6 +11,8 @@ import {
 import { getDonorAcceptedRequests } from "@/app/actions/donations";
 import { formatDate, formatDateTime } from "@/lib/utils";
 import Link from "next/link";
+import { confirmPickup } from "@/app/actions/donations";
+
 
 export default function AcceptedRequestsPage() {
     const [requests, setRequests] = useState([]);
@@ -33,6 +35,22 @@ export default function AcceptedRequestsPage() {
             </div>
         );
     }
+
+    const handleConfirmPickup = async (acceptedId) => {
+        try {
+            await confirmPickup(acceptedId);
+            setRequests((prev) =>
+                prev.map((r) =>
+                    r.acceptedId === acceptedId
+                        ? { ...r, pickedAt: new Date(), acceptedStatus: "picked" }
+                        : r
+                )
+            );
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
 
     return (
         <div className="space-y-6">
@@ -94,7 +112,7 @@ export default function AcceptedRequestsPage() {
                                             }}
                                             className="flex justify-center gap-1.5 px-3 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-sm"
                                         >
-                                            <Copy className="w-4 h-4"/>
+                                            <Copy className="w-4 h-4" />
                                             Copy Number
                                         </button>
 
@@ -127,17 +145,21 @@ export default function AcceptedRequestsPage() {
                                 </div>
 
                                 {!req.pickedAt && (
-                                    <button className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 ml-auto">
+                                    <button
+                                    onClick={() => handleConfirmPickup(req.acceptedId)} 
+                                    className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 ml-auto">
                                         <CheckCircle2 className="w-4 h-4" />
-                                        Mark as Picked
+                                        Confirm Pickup
                                     </button>
                                 )}
+
 
                                 {req.pickedAt && (
                                     <p className="text-xs text-emerald-600">
                                         Picked on {formatDateTime(req.pickedAt)}
                                     </p>
                                 )}
+
                             </div>
                         </div>
                     </div>

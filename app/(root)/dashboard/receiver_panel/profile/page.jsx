@@ -5,6 +5,7 @@ import { User, Phone, MapPin, Mail, ArrowLeft, Edit2, Save, X, LogInIcon } from 
 import { getUserProfile } from '@/app/actions/getUserProfile';
 import { useRouter } from 'next/navigation';
 import { updateUserProfile } from '@/app/actions/updateUserProfile';
+import { signOut } from '@/lib/auth-client';
 
 export default function ReceiverProfile() {
   const [profile, setProfile] = useState(null);

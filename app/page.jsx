@@ -37,7 +37,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-          <Image src="/assets/logo/foodconnect_main.png" height={200} width={200}/>
+          <Image src="/assets/logo/foodconnect_main.png" height={200} width={200} alt='logo'/>
             {/* <div className="bg-emerald-600 p-2 rounded-full">
               <Leaf className="h-6 w-6 text-white" />
             </div>
