@@ -1,4 +1,4 @@
-import { CheckCircle2, LogOut, Menu, Package, User } from 'lucide-react'
+import { CheckCircle2, HistoryIcon, LogOut, Menu, Package, User } from 'lucide-react'
 import { usePathname, useRouter } from 'next/navigation';
 import React, { useState } from 'react'
 import { useSession } from '@/lib/auth-client';
@@ -60,7 +60,7 @@ const ReceiverSideBar = () => {
                 <button className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-slate-700 font-semibold transition-all hover:bg-slate-100">
                     <span className="absolute inset-0 bg-white/10 pointer-events-none" />
 
-                    <CheckCircle2 className="w-5 h-5 relative z-10" />
+                    <HistoryIcon className="w-5 h-5 relative z-10" />
                     <span className="relative z-10">History</span>
                 </button>
             </nav>
@@ -83,16 +83,32 @@ const ReceiverSideBar = () => {
       "
     >
       {/* Avatar */}
-      <div className="
-        h-10 w-_toggle w-10
-        flex items-center justify-center
-        rounded-full
-        bg-gradient-to-br from-orange-500 to-amber-500
-        text-white font-semibold
-        shadow-sm
-      ">
-        {user?.name?.charAt(0).toUpperCase() || "!"}
-      </div>
+   <div   className={`
+    h-10 w-10
+    flex items-center justify-center
+    rounded-full
+    bg-gradient-to-br from-orange-500 to-amber-500
+    text-white font-semibold
+    shadow-sm
+    overflow-hidden
+    ${user?.image ? "ring-2 ring-orange-400 ring-offset-2 ring-offset-white" : ""}
+
+  `}>
+          {user?.image ? (
+    <Image
+      src={user.image}
+      alt={user.name || "User"}
+      height={200}
+      width={200}
+      className="h-full w-full object-cover"
+      referrerPolicy="no-referrer"
+    />
+  ) : (
+    <span className="text-sm">
+      {user?.name?.charAt(0)?.toUpperCase() || "!"}
+    </span>
+  )}
+  </div>
 
       {/* Name + Email */}
       <div className="flex flex-col text-left leading-tight overflow-hidden">

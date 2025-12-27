@@ -14,11 +14,36 @@ import Link from "next/link"
 import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { loginSchema } from "@/lib/validations"
-import { signIn } from "@/lib/auth-client"
-import { Router } from "next/router"
+import { authClient, signIn, useSession } from "@/lib/auth-client"
 import Image from "next/image"
+import { useRouter } from "next/navigation"
+import { useEffect } from "react"
+import { getUserRole } from "@/app/actions/getUserRole"
 
 export default function LoginForm({className, ...props}) {
+const { data: session, isPending } = useSession();
+const router = useRouter();
+  useEffect(() => {
+  if (!isPending && session?.user) {
+    (async () => {
+      const role = await getUserRole();
+
+      // admin shortcut
+      if (session.user.email === "admin@foodconnect.com") {
+        router.replace("/admin/dashboard");
+        return;
+      }
+
+      if (!role) {
+        router.replace("/role");
+      } else if (role === "sharer") {
+        router.replace("/dashboard/donor_panel");
+      } else {
+        router.replace("/dashboard/receiver_panel");
+      }
+    })();
+  }
+}, [session, isPending]);
   const {
     register,
     handleSubmit,
@@ -41,26 +66,32 @@ export default function LoginForm({className, ...props}) {
     }
 
     // Login successful - redirect to role selection or original destination
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirect = urlParams.get("redirect");
+//     const urlParams = new URLSearchParams(window.location.search);
+//     const redirect = urlParams.get("redirect");
 
-    // If admin → go directly to admin dashboard
-if (result?.data?.user?.email === "admin@foodconnect.com") {
-  window.location.href = "/admin/dashboard";
-  return;
-}
+//     // If admin → go directly to admin dashboard
+// if (result?.data?.user?.email === "admin@foodconnect.com") {
+//   window.location.href = "/admin/dashboard";
+//   return;
+// }
     
-    if (redirect) {
-      window.location.href = redirect;
-    } else {
-      window.location.href = "/role";
-    }
+//     if (redirect) {
+//       window.location.href = redirect;
+//     } else {
+//       window.location.href = "/role";
+//     }
     
   } catch (err) {
     console.error("Login failed:", err);
     alert("Something went wrong");
   }
   };
+    const handleSignIn = async() =>{
+    return await authClient.signIn.social({
+      provider: 'google',
+      callbackURL: "/auth-redirect"
+    })
+  }
   return (
         <div className={cn("flex flex-col gap-6 min-h-screen items-center justify-center", className)} {...props}>
       <Card className="overflow-hidden p-0 w-full max-w-3xl mx-auto">
@@ -111,7 +142,7 @@ if (result?.data?.user?.email === "admin@foodconnect.com") {
               </FieldSeparator>
 
               <Field className="flex justify-center" >
-                <Button variant="outline" type="button" className="border border-green-600">
+                <Button onClick={handleSignIn} variant="outline" type="button" className="border border-green-600">
                   <Image src="/assets/icons/google.svg" width={22} height={22} alt="google"/>
 
                   <span className="sr-only">Login with Google</span>

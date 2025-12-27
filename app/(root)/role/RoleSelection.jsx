@@ -71,7 +71,7 @@ export default function RoleSelection() {
           >
             <div className="flex flex-col items-center text-center">
               <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
-                <Image src="/assets/icons/searching.png"height={60} width={60} />
+                <Image src="/assets/icons/searching.png"height={60} width={60} alt='icon' />
 
               </div>
               <h2 className="text-3xl font-bold text-slate-900 mb-3">Find Food</h2>

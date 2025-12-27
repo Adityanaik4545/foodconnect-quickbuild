@@ -60,9 +60,32 @@ const DonorSideBar = () => {
                "
                 >
                   {/* Avatar */}
-                  <div className="h-10 w-10 flex items-center justify-center rounded-full bg-black text-white font-semibold">
-                    {user?.name?.charAt(0).toUpperCase() || "!"}
-                  </div>
+   <div   className={`
+    h-10 w-10
+    flex items-center justify-center
+    rounded-full
+    bg-gradient-to-br from-emerald-500 to-emerald-500
+    text-white font-semibold
+    shadow-sm
+    overflow-hidden
+    ${user?.image ? "ring-2 ring-emerald-400 ring-offset-2 ring-offset-white" : ""}
+
+  `}>
+          {user?.image ? (
+    <Image
+      src={user.image}
+      alt={user.name || "User"}
+      height={200}
+      width={200}
+      className="h-full w-full object-cover"
+      referrerPolicy="no-referrer"
+    />
+  ) : (
+    <span className="text-sm">
+      {user?.name?.charAt(0)?.toUpperCase() || "!"}
+    </span>
+  )}
+  </div>
 
                   {/* Name + Email */}
                   <div className="flex flex-col text-left leading-tight overflow-hidden">
