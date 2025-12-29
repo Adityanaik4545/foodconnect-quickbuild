@@ -3,6 +3,7 @@
 import { db } from "@/drizzle/db";
 import { user, donation, acceptedDonation, userProfile } from "@/drizzle/schema";
 import { eq, count } from "drizzle-orm";
+import { email } from "zod";
 
 export async function getAdminStats() {
     try {
@@ -150,11 +151,13 @@ export async function getAllUsers() {
             .select({
                 userId: userProfile.userId,
                 name: userProfile.name,
+                email: user.email,
                 role: userProfile.role,
                 phoneNumber: userProfile.phoneNumber,
                 address: userProfile.address,
             })
-            .from(userProfile);
+            .from(userProfile)
+            .innerJoin(user, eq(user.id, userProfile.userId));
 
         return users_data;
     } catch (error) {

@@ -12,6 +12,13 @@
   }
 }
 
+@layer base {
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
 
 :root {
   --font-sans: var(--font-poppins);

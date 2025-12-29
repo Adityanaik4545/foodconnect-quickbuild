@@ -4,6 +4,7 @@ import AdminGuard from '../../../../components/AdminGuard'
 import React, { useEffect, useState } from 'react'
 import { getAllUsers } from '@/app/actions/adminStats'
 import { Search, Users, Phone, MapPin, Heart, ShoppingBag, UserCheck } from 'lucide-react'
+import { DeleteUser } from '@/components/DeleteUser';
 
 const UsersPage = () => {
   const [users, setUsers] = useState([])
@@ -11,6 +12,9 @@ const UsersPage = () => {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [selectedRole, setSelectedRole] = useState('all')
+  const [openDelete, setOpenDelete] = useState(false)
+  const [selectedUser, setSelectedUser] = useState(null)
+
 
   useEffect(() => {
     loadUsers()
@@ -221,10 +225,20 @@ const UsersPage = () => {
                           <span className="text-sm text-gray-500">-</span>
                         )}
                       </td>
-                      <td className="px-6 py-4">
+                      <td className="px-6 py-4 flex gap-2">
                         <button className="text-blue-600 hover:text-blue-800 font-medium text-sm transition">
                           View Details
                         </button>
+                        <button
+                        onClick={()=>{
+                          setSelectedUser(user);
+                          setOpenDelete(true);
+                        }}
+                        className="text-red-600 hover:text-red-800 text-sm font-medium"
+                        >
+                          Restrict
+                        </button>
+                        
                       </td>
                     </tr>
                   ))}
@@ -247,6 +261,14 @@ const UsersPage = () => {
           </div>
         )}
       </div>
+
+      {selectedUser && (
+        <DeleteUser
+        open= {openDelete}
+        onOpenChange= {setOpenDelete}
+        user= {selectedUser}
+        />
+      )}
     </AdminGuard>
   )
 }

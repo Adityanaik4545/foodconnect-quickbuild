@@ -74,7 +74,6 @@ const page = () => {
       <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">Admin Dashboard</h1>
           <p className="text-gray-600">Manage your platform and monitor activities</p>
         </div>
 
