@@ -26,9 +26,26 @@ import {
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { SelectOption } from "./SelectOption"
+import { restrictUserByAdmin } from "@/app/actions/admin"
 
 export function DeleteUser({open, onOpenChange, user}) {
+  const [reason, setReason] = React.useState("");
   const isDesktop = useMediaQuery("(min-width: 768px)")
+
+  React.useEffect(() => {
+  if (!open) setReason("");
+}, [open]);
+
+
+    const content = (
+    <DeleteUserForm
+      reason={reason}
+      setReason={setReason}
+      user={user}
+      onClose={() => onOpenChange(false)}
+      className="px-4"
+    />
+  );
 
   if (isDesktop) {
     return (
@@ -43,7 +60,7 @@ export function DeleteUser({open, onOpenChange, user}) {
                You are about to restrict <strong>{user?.email}</strong>. please select a reason
             </DialogDescription>
           </DialogHeader>
-          <DeleteUserForm className="px-4" />
+          {content}
         </DialogContent>
       </Dialog>
     )
@@ -61,7 +78,7 @@ export function DeleteUser({open, onOpenChange, user}) {
               Specify you reason for restricting this user account.
           </DrawerDescription>
         </DrawerHeader>
-        <DeleteUserForm className="px-4" />
+        {content}
         <DrawerFooter className="pt-2">
           <DrawerClose asChild>
             <Button variant="outline">Cancel</Button>
@@ -72,13 +89,35 @@ export function DeleteUser({open, onOpenChange, user}) {
   )
 }
 
-function DeleteUserForm({ className }) {
+function DeleteUserForm({ reason, setReason, user, onClose, className }) {
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+
+    const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    if (!reason) return;
+
+    setIsSubmitting(true);
+
+try {
+  console.log("restricting user:", user.userId, reason);
+      await restrictUserByAdmin(user.userId, reason)
+  
+      onClose();
+} catch (error) {
+  console.error("failed to restrict user:", error);
+  alert("failed to restrict user. please try again.")
+} finally {
+  setIsSubmitting(false);
+}
+  };
   return (
-    <form className={cn("grid items-start gap-6", className)}>
+    <form onSubmit={handleSubmit} className={cn("grid items-start gap-6", className)}>
       <div className="grid gap-3">
-        <SelectOption/>
+        <SelectOption value={reason} onChange={setReason} />
       </div>
-      <Button type="submit">Confirm Restriction</Button>
+      <Button type="submit" variant="destructive" disabled={!reason || isSubmitting}>{isSubmitting ? "Restricting..." : "Confirm Restriction"}</Button>
     </form>
   )
 }

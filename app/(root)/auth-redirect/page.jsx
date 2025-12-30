@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { getUserRole } from "@/app/actions/getUserRole";
+import { isUserRestricted } from "@/app/actions/isRestrictedUser";
 
 export default function AuthRedirect() {
   const { data: session, isPending } = useSession();
@@ -24,6 +25,13 @@ export default function AuthRedirect() {
         return;
       }
 
+      // restricted user check
+      const restriction = await isUserRestricted();
+        if (restriction.isRestricted) {
+        router.replace("/restricted");
+        return;
+      }
+
       const role = await getUserRole();
 
       if (!role) {
@@ -34,7 +42,7 @@ export default function AuthRedirect() {
         router.replace("/dashboard/receiver_panel");
       }
     })();
-  }, [session, isPending]);
+  }, [session, isPending,router]);
 
   return (
     <div className="h-screen flex items-center justify-center text-slate-500">

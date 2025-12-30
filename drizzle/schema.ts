@@ -6,6 +6,9 @@ export const user = pgTable("user", {
   email: text("email").notNull().unique(),
   emailVerified: boolean("email_verified").default(false).notNull(),
   image: text("image"),
+  isRestricted: boolean("is_restricted").default(false).notNull(),
+  restrictedReason: text("restricted_reason"),
+  restrictedAt: timestamp("restricted_at"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at")
     .defaultNow()
@@ -102,7 +105,7 @@ export const donation = pgTable("donation", {
   type: text("type"),          // eg: veg / non-veg
   category: text("category"),  // cooked / raw / packed
 
-  status: text("status").default("available"), 
+  status: text("status").default("available"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 
   description: text("description"),
