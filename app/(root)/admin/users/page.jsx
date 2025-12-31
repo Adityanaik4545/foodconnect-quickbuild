@@ -5,6 +5,10 @@ import React, { useEffect, useState } from 'react'
 import { getAllUsers } from '@/app/actions/adminStats'
 import { Search, Users, Phone, MapPin, Heart, ShoppingBag, UserCheck } from 'lucide-react'
 import { DeleteUser } from '@/components/DeleteUser';
+import { asc } from 'drizzle-orm';
+import { unrestrictUserByAdmin } from '@/app/actions/admin';
+import { Button } from '@/components/ui/button';
+import { Badge } from '@/components/ui/badge';
 
 const UsersPage = () => {
   const [users, setUsers] = useState([])
@@ -191,6 +195,7 @@ const UsersPage = () => {
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Phone</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Address</th>
                     <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700">Action</th>
+                    <th className="px-6 py-3 text-left text-sm font-semibold text-gray-700 flex justify-center">Status</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
@@ -229,16 +234,39 @@ const UsersPage = () => {
                         <button className="text-blue-600 hover:text-blue-800 font-medium text-sm transition">
                           View Details
                         </button>
-                        <button
-                        onClick={()=>{
-                          setSelectedUser(user);
-                          setOpenDelete(true);
-                        }}
-                        className="text-red-600 hover:text-red-800 text-sm font-medium"
-                        >
-                          Restrict
-                        </button>
-                        
+                        {user.isRestricted ? (
+                          <Button
+                            variant="link"
+                            className=" text-emerald-600 hover:text-emerald-700 text-sm font-medium"
+                            onClick={() => unrestrictUserByAdmin(user.userId)}
+                          >
+                            Unrestrict
+                          </Button>
+                        ) : (
+
+                          <Button
+                            variant="link"
+                            onClick={() => {
+                              setSelectedUser(user);
+                              setOpenDelete(true);
+                            }}
+                            className="text-red-600 hover:bg-red-50 text-sm font-medium pl-[23px]"
+                          >
+                            Restrict
+                          </Button>
+                        )}
+
+                      </td>
+                      <td className='px-6 py-4  gap-2'>
+                        {user.isRestricted ? (
+                          <div className='flex justify-center'>
+                            <Badge variant="outline" className="bg-red-500 text-white">Restricted</Badge>
+                          </div>
+                        ) : (
+                          <div className=' flex justify-center'>
+                            <Badge variant="outline" className="bg-green-400 text-white">Active</Badge>
+                          </div>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -264,9 +292,9 @@ const UsersPage = () => {
 
       {selectedUser && (
         <DeleteUser
-        open= {openDelete}
-        onOpenChange= {setOpenDelete}
-        user= {selectedUser}
+          open={openDelete}
+          onOpenChange={setOpenDelete}
+          user={selectedUser}
         />
       )}
     </AdminGuard>

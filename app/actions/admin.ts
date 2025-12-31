@@ -5,6 +5,7 @@ import { session, user } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
 import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
+import { user as userTable } from "@/drizzle/schema";
 
 export async function restrictUserByAdmin(
   targetUserId: string,
@@ -49,4 +50,44 @@ export async function restrictUserByAdmin(
     .where(eq(session.userId, targetUserId));
 
   return { success: true };
+}
+
+export async function unrestrictUserByAdmin(targetUserId: string) {
+  const {user: AdminUser} = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if(!AdminUser || AdminUser.email !== "admin@foodconnect.com") {
+    throw new Error("Unauthorized");
+  }
+
+  await db
+  .update(user)
+  .set({
+    isRestricted:false,
+    restrictedAt: null,
+    restrictedReason: null
+  })
+  .where(eq(user.id, targetUserId));
+
+  return { success: true };
+}
+
+export async function isUserRestricted() {
+    const { user } = await auth.api.getSession({
+        headers: await headers(),
+    });
+
+    if (!user) return false;
+
+    const dbUser = await db.query.user.findFirst({
+        where: eq(userTable.id, user.id),
+        columns: {
+            isRestricted: true,
+            restrictedReason: true,
+            restrictedAt: true,
+        },
+    });
+
+    return dbUser;
 }

@@ -1,4 +1,4 @@
-import { isUserRestricted } from "@/app/actions/isRestrictedUser";
+import { isUserRestricted } from "@/app/actions/admin";
 import RestrictedClient from "@/components/RestrictedClient";
 
 export default async function RestrictedPage() {

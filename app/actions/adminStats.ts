@@ -155,6 +155,7 @@ export async function getAllUsers() {
                 role: userProfile.role,
                 phoneNumber: userProfile.phoneNumber,
                 address: userProfile.address,
+                isRestricted: user.isRestricted,
             })
             .from(userProfile)
             .innerJoin(user, eq(user.id, userProfile.userId));

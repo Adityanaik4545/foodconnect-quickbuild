@@ -1,12 +1,22 @@
 "use client";
 
-import { ArrowBigLeft, ArrowLeft, ShieldCheck } from "lucide-react";
+import { ArrowBigLeft, ArrowLeft, LogOut, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { ArrowUpIcon } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { signOut } from "@/lib/auth-client";
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
+
+    const handleLogout = async () => {
+      try {
+        await signOut();
+        router.push('/login');
+      } catch (error) {
+        console.error('Error logging out:', error);
+      }
+    };
 
   return (
     <div className="min-h-screen bg-slate-50">
@@ -23,6 +33,9 @@ export default function AdminLayout({ children }) {
             <ShieldCheck className="w-5 h-5 text-emerald-600" />
             Admin Panel
           </div>
+              <Button variant="outline" size="icon" className="rounded-full w-15 h-12" onClick={() => handleLogout()}>
+      <LogOut />
+    </Button>
         </div>
       </header>
 

@@ -4,7 +4,7 @@ import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "@/lib/auth-client";
 import { getUserRole } from "@/app/actions/getUserRole";
-import { isUserRestricted } from "@/app/actions/isRestrictedUser";
+import { isUserRestricted } from "@/app/actions/admin";
 
 export default function AuthRedirect() {
   const { data: session, isPending } = useSession();
