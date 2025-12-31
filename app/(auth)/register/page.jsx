@@ -14,7 +14,7 @@ import { useForm } from "react-hook-form"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { signupSchema } from "@/lib/validations"
 import Link from "next/link"
-import { signUp } from "@/lib/auth-client"
+import { authClient, signUp } from "@/lib/auth-client"
 import Image from "next/image"
 
 export default function SignupForm({ className, ...props }) {
@@ -49,6 +49,13 @@ export default function SignupForm({ className, ...props }) {
       alert("Something went wrong");
     }
   };
+
+      const handleSignIn = async() =>{
+      return await authClient.signIn.social({
+        provider: 'google',
+        callbackURL: "/auth-redirect"
+      })
+    }
 
   return (
     <div
@@ -129,8 +136,10 @@ export default function SignupForm({ className, ...props }) {
               {/* Social Buttons */}
               <Field className="flex justify-center">
 
-                <Button variant="outline" type="button">
+                <Button onClick={handleSignIn} variant="outline" type="button" className="border border-green-600">
                   <Image src="/assets/icons/google.svg" width={22} height={22} alt="google"/>
+
+                  <span className="sr-only">Login with Google</span>
                 </Button>
 
               </Field>
