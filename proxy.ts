@@ -16,7 +16,7 @@ const publicRoutes = [
 export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
-  // 1️⃣ Allow public routes
+  //Allow public routes
   if (
     publicRoutes.includes(pathname) ||
     pathname.startsWith("/api/auth")
@@ -24,19 +24,19 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // 2️⃣ Get session
+  //Get session
   const { user } = await auth.api.getSession({
     headers: request.headers,
   });
 
-  // 3️⃣ Not logged in → login
+  //Not logged in → login
   if (!user) {
     const loginUrl = new URL("/login", request.url);
     loginUrl.searchParams.set("redirect", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
-  // 4️⃣ Restricted user check
+  //Restricted user check
   const dbUser = await db.query.user.findFirst({
     where: eq(userTable.id, user.id),
     columns: { isRestricted: true },
@@ -46,7 +46,7 @@ export async function proxy(request: NextRequest) {
     return NextResponse.redirect(new URL("/restricted", request.url));
   }
 
-  // 5️⃣ Allow access
+  //Allow access
   return NextResponse.next();
 }
 

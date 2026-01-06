@@ -29,7 +29,7 @@ export default function RoleSelection() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 flex  justify-center p-4">
+    <div className="min-h-screen bg-linear-to-br  from-slate-50 via-white to-slate-50 flex  justify-center p-4">
       <div className="max-w-4xl w-full">
         {/* Logo/Brand */}
         <div className="text-center mb-25">
@@ -49,7 +49,7 @@ export default function RoleSelection() {
             className="group relative bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-emerald-500 transition-all hover:shadow-xl text-left disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
                 <Image src="/assets/icons/donate-icon.png"height={60} width={60} alt='logo'/>
               </div>
               <h2 className="text-3xl font-bold text-slate-900 mb-3">Share Food</h2>
@@ -70,7 +70,7 @@ export default function RoleSelection() {
             className="group relative bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-orange-500 transition-all hover:shadow-xl text-left disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <div className="flex flex-col items-center text-center">
-              <div className="w-20 h-20 rounded-2xl bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
+              <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
                 <Image src="/assets/icons/searching.png"height={60} width={60} alt='icon' />
 
               </div>

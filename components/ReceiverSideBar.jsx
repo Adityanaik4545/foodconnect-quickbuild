@@ -11,14 +11,6 @@ const ReceiverSideBar = () => {
     const pathname = usePathname();
     const { data: session } = useSession();
     const user = session?.user;
-    const handleLogout = async () => {
-        try {
-            await signOut();
-            router.push('/login');
-        } catch (error) {
-            console.error('Error logging out:', error);
-        }
-    };
 
     return <aside className="w-72 bg-white border-r border-slate-200 shadow-sm flex flex-col">
         <div className="p-6 space-y-6">
@@ -34,7 +26,7 @@ const ReceiverSideBar = () => {
                     onClick={() => router.push("/dashboard/receiver_panel")}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold transition-all duration-300
                     ${pathname === "/dashboard/receiver_panel"
-                            ? "bg-gradient-to-r from-orange-500 to-amber-400 text-white shadow-lg shadow-orange-500/30 hover:from-orange-600 hover:to-amber-500 hover:shadow-orange-500/40 active:scale-[0.98]"
+                            ? "bg-linear-to-r from-orange-500 to-amber-400 text-white shadow-lg shadow-orange-500/30 hover:from-orange-600 hover:to-amber-500 hover:shadow-orange-500/40 active:scale-[0.98]"
                             : "text-slate-700 hover:bg-slate-100"
                         }`}
 
@@ -48,7 +40,7 @@ const ReceiverSideBar = () => {
                     onClick={() => router.push("/dashboard/receiver_panel/accepted")}
                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-2xl font-semibold transition-all duration-300
                     ${pathname === "/dashboard/receiver_panel/accepted"
-                            ? "bg-gradient-to-r from-orange-500 to-amber-400 text-white shadow-lg shadow-orange-500/30 hover:from-orange-600 hover:to-amber-500 hover:shadow-orange-500/40 active:scale-[0.98]"
+                            ? "bg-linear-to-r from-orange-500 to-amber-400 text-white shadow-lg shadow-orange-500/30 hover:from-orange-600 hover:to-amber-500 hover:shadow-orange-500/40 active:scale-[0.98]"
                             : "text-slate-700 hover:bg-slate-100"
                         }`}
                 >
@@ -87,7 +79,7 @@ const ReceiverSideBar = () => {
     h-10 w-10
     flex items-center justify-center
     rounded-full
-    bg-gradient-to-br from-orange-500 to-amber-500
+    bg-linear-to-br from-orange-500 to-amber-500
     text-white font-semibold
     shadow-sm
     overflow-hidden

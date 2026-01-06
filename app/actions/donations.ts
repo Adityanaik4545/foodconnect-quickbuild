@@ -16,14 +16,14 @@ export async function getDonorDonations() {
     throw new Error("Not authenticated");
   }
 
-  // 1️⃣ Get donor donations
+  //Get donor donations
   const donations = await db
     .select()
     .from(donation)
     .where(eq(donation.donorId, user.id))
     .orderBy(desc(donation.createdAt));
 
-  // 2️⃣ Get accepted donations WITH receiver info
+  //Get accepted donations WITH receiver info
   const accepted = await db
     .select({
       donationId: acceptedDonation.donationId,
@@ -35,7 +35,7 @@ export async function getDonorDonations() {
     .from(acceptedDonation)
     .leftJoin(userTable, eq(userTable.id, acceptedDonation.receiverId));
 
-  // 3️⃣ Merge data
+  //Merge data
   return donations.map((don) => {
     const acceptedForDonation = accepted.filter(
       (a) => a.donationId === don.donationId
@@ -55,7 +55,7 @@ export async function getDonorDonations() {
 
       acceptedCount: acceptedForDonation.length,
 
-      // 🔥 NEW — donor can now see who accepted
+      //donor can now see who accepted
       acceptedBy: acceptedForDonation.map((a) => ({
         name: a.receiverName,
         email: a.receiverEmail,
@@ -243,7 +243,7 @@ const accepted = await db
   })
   .returning();
 
-// 🔥 IMPORTANT: update donation status
+//update donation status
 await db
   .update(donation)
   .set({ status: "accepted" })

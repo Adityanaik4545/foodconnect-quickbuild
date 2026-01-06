@@ -1,8 +1,5 @@
 "use client";
-import Image from "next/image";
-import { Home, Menu, User, Calendar, Package, Plus, LogOut, TrendingUp, Clock, MapPin, CheckCircle2, HomeIcon } from 'lucide-react';
-import { usePathname, useRouter } from "next/navigation";
-import { useSession } from "@/lib/auth-client";
+import { usePathname} from "next/navigation";
 import { useState } from "react";
 import ListFoodForm from "@/components/ListFoodForm";
 import { getDonorDonations } from "@/app/actions/donations";
@@ -35,7 +32,7 @@ export default function DashboardLayout({ children }) {
   
 
   return (
-    <div className="h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+    <div className="h-screen bg-linear-to-br from-slate-50 via-white to-slate-50">
       <div className="flex h-full">
         {isDonor && <DonorSideBar />}
         {isReceiver && <ReceiverSideBar/>}
@@ -51,7 +48,7 @@ export default function DashboardLayout({ children }) {
         fixed bottom-6 right-20 z-50
         flex items-center gap-2
         rounded-full px-6 py-2
-        bg-gradient-to-r from-emerald-600 to-emerald-400
+        bg-linear-to-r from-emerald-600 to-emerald-400
         text-white font-medium
         shadow-lg shadow-emerald-500/40
         hover:from-emerald-700 hover:to-emerald-500

@@ -1,10 +1,10 @@
 "use server";
 
-import { auth } from "@/lib/auth";            // BetterAuth server instance
+import { auth } from "@/lib/auth";
 import { db } from "@/drizzle/db";
 import { userProfile } from "@/drizzle/schema";
 import { eq } from "drizzle-orm";
-import { cookies, headers } from "next/headers";
+import { headers } from "next/headers";
 
 export async function saveUserRole(role: string) {
   // Authenticate user

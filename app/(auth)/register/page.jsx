@@ -122,7 +122,7 @@ export default function SignupForm({ className, ...props }) {
               {/* Submit */}
               <Field>
                 <Button disabled={isSubmitting} type="submit" className="bg-green-800 text-white border border-green-500 hover:bg-green-100 hover:text-black  hover:shadow-lg hover:shadow-green-600/40
-                transition-colors transition-shadow duration-300 ease-in-out
+                transition-colors  duration-300 ease-in-out
                 active:scale-95">
                   {isSubmitting ? "Creating account..." : "Sign Up"}
                 </Button>

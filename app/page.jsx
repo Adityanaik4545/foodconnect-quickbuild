@@ -5,19 +5,12 @@ import Link from 'next/link';
 import { 
   Menu, 
   X, 
-  Heart, 
   Utensils, 
   Users, 
-  ArrowRight, 
-  CheckCircle, 
-  Globe, 
   Truck, 
   Clock,
-  Leaf
 } from 'lucide-react';
 import Image from 'next/image';
-
-// --- Components ---
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,25 +31,10 @@ const Navbar = () => {
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
           <Image src="/assets/logo/foodconnect_main.png" height={200} width={200} alt='logo'/>
-            {/* <div className="bg-emerald-600 p-2 rounded-full">
-              <Leaf className="h-6 w-6 text-white" />
-            </div>
-            <span className={`text-2xl font-bold font-poppins tracking-tight ${scrolled ? 'text-gray-900' : 'text-gray-900 lg:text-white'}`}>
-              Food<span className="text-emerald-500">Connect</span>
-            </span> */}
           </Link>
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            {/* {['Home', 'About Us'].map((item) => (
-              <a 
-                key={item} 
-                href="#" 
-                className={`font-medium hover:text-emerald-500 transition-colors ${scrolled ? 'text-gray-600' : 'text-white/90 hover:text-white'}`}
-              >
-                {item}
-              </a>
-            ))} */}
             <Link href="/register">
               <button className="bg-emerald-600 text-white px-6 py-2.5 rounded-full font-semibold hover:bg-emerald-700 transition-all transform hover:scale-105 shadow-lg hover:shadow-emerald-500/30">
                 Sign Up
@@ -114,14 +92,14 @@ const Hero = () => {
           alt="Community sharing food"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-gray-900/90 via-gray-900/70 to-transparent"></div>
+        <div className="absolute inset-0 bg-linear-to-r from-gray-900/90 via-gray-900/70 to-transparent"></div>
       </div>
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-2xl text-white">
           <h1 className="text-5xl lg:text-7xl font-bold font-poppins leading-tight mb-6">
             Share a Meal, <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-300">
+            <span className="text-transparent bg-clip-text bg-linear-to-r from-emerald-400 to-teal-300">
               Share Hope.
             </span>
           </h1>
@@ -269,10 +247,6 @@ const Footer = () => {
         <div className="grid md:grid-cols-3 gap-12">
           <div className="col-span-1 md:col-span-1">
             <div className="flex items-center space-x-2 mb-6">
-              {/* <div className="bg-emerald-600 p-1.5 rounded-lg">
-                <Leaf className="h-5 w-5 text-white" />
-              </div>
-              <span className="text-2xl font-bold text-white font-poppins">FoodConnect</span> */}
               <Image src="/assets/logo/foodconnect_main.png" height={200} width={200} alt='logo' />
             </div>
             <p className="text-sm leading-relaxed text-gray-400">

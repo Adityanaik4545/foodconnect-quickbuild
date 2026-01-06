@@ -1,90 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Package, Edit2, Trash2, MapPin, Clock, Calendar, Search, Filter, X, Check } from 'lucide-react';
+import { Package, Edit2, Trash2, MapPin, Clock, Search, X} from 'lucide-react';
 import { getDonorDonations, updateDonation, deleteDonation } from '@/app/actions/donations';
-
-// Dummy data
-const DUMMY_DONATIONS = [
-  {
-    id: 1,
-    mealName: "Vegetable Biryani",
-    quantity: 15,
-    category: "Lunch",
-    type: "Vegetarian",
-    status: "available",
-    address: "123 MG Road, Bangalore",
-    preparedTime: "2024-12-22T12:30:00",
-    expiryTime: "2024-12-22T18:00:00",
-    description: "Fresh vegetable biryani with raita",
-    createdAt: "2024-12-22T11:00:00"
-  },
-  {
-    id: 2,
-    mealName: "Chicken Curry with Rice",
-    quantity: 20,
-    category: "Dinner",
-    type: "Non-Vegetarian",
-    status: "available",
-    address: "456 Brigade Road, Bangalore",
-    preparedTime: "2024-12-22T10:00:00",
-    expiryTime: "2024-12-22T16:00:00",
-    description: "Homestyle chicken curry with steamed rice",
-    createdAt: "2024-12-22T09:30:00"
-  },
-  {
-    id: 3,
-    mealName: "Masala Dosa",
-    quantity: 30,
-    category: "Breakfast",
-    type: "Vegetarian",
-    status: "claimed",
-    address: "789 Koramangala, Bangalore",
-    preparedTime: "2024-12-21T07:00:00",
-    expiryTime: "2024-12-21T12:00:00",
-    description: "Crispy dosas with potato filling",
-    createdAt: "2024-12-21T06:30:00"
-  },
-  {
-    id: 4,
-    mealName: "Dal Tadka with Roti",
-    quantity: 25,
-    category: "Lunch",
-    type: "Vegetarian",
-    status: "completed",
-    address: "321 Indiranagar, Bangalore",
-    preparedTime: "2024-12-20T11:00:00",
-    expiryTime: "2024-12-20T17:00:00",
-    description: "Yellow dal with fresh rotis and pickle",
-    createdAt: "2024-12-20T10:00:00"
-  },
-  {
-    id: 5,
-    mealName: "Paneer Tikka",
-    quantity: 12,
-    category: "Snacks",
-    type: "Vegetarian",
-    status: "available",
-    address: "567 Whitefield, Bangalore",
-    preparedTime: "2024-12-22T15:00:00",
-    expiryTime: "2024-12-22T20:00:00",
-    description: "Grilled paneer tikka with mint chutney",
-    createdAt: "2024-12-22T14:30:00"
-  },
-  {
-    id: 6,
-    mealName: "Mixed Vegetable Curry",
-    quantity: 18,
-    category: "Dinner",
-    type: "Vegetarian",
-    status: "completed",
-    address: "890 HSR Layout, Bangalore",
-    preparedTime: "2024-12-19T18:00:00",
-    expiryTime: "2024-12-19T22:00:00",
-    description: "Mixed vegetables in aromatic curry",
-    createdAt: "2024-12-19T17:00:00"
-  }
-];
 
 const FoodListPage = () => {
   const [donations, setDonations] = useState([]);
@@ -179,7 +97,7 @@ const FoodListPage = () => {
 
   return (
     <>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-50">
         <div className="max-w-7xl mx-auto px-6 py-8">
           {/* Header */}
           <div className="mb-8">
@@ -266,7 +184,7 @@ const FoodListPage = () => {
               <div className="p-6 border-b border-slate-100">
                 <div className="flex items-start justify-between mb-3">
                   <div className="flex items-start gap-4">
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${
                       donation.status === 'available' ? 'bg-emerald-100' : 
                       donation.status === 'claimed' ? 'bg-orange-100' : 
                       'bg-slate-100'

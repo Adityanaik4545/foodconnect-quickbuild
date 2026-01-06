@@ -64,22 +64,6 @@ const router = useRouter();
       alert(result.error.message || "Login failed");
       return;
     }
-
-    // Login successful - redirect to role selection or original destination
-//     const urlParams = new URLSearchParams(window.location.search);
-//     const redirect = urlParams.get("redirect");
-
-//     // If admin → go directly to admin dashboard
-// if (result?.data?.user?.email === "admin@foodconnect.com") {
-//   window.location.href = "/admin/dashboard";
-//   return;
-// }
-    
-//     if (redirect) {
-//       window.location.href = redirect;
-//     } else {
-//       window.location.href = "/role";
-//     }
     
   } catch (err) {
     console.error("Login failed:", err);
@@ -131,7 +115,7 @@ const router = useRouter();
 
               <Field>
                 <Button disabled={isSubmitting} type="submit" className="bg-green-800 text-white border border-green-500 hover:bg-green-100 hover:text-black  hover:shadow-lg hover:shadow-green-600/40
-                transition-colors transition-shadow duration-500 ease-in-out
+                transition-colors duration-500 ease-in-out
                 active:scale-95">
                   {isSubmitting ? "Logging in..." : "Login"}
                 </Button>

@@ -23,12 +23,10 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { SelectOption } from "./SelectOption"
 import { restrictUserByAdmin } from "@/app/actions/admin"
 
-export function DeleteUser({open, onOpenChange, user}) {
+export function DeleteUser({open, onOpenChange, user, onSuccess}) {
   const [reason, setReason] = React.useState("");
   const isDesktop = useMediaQuery("(min-width: 768px)")
 
@@ -43,6 +41,7 @@ export function DeleteUser({open, onOpenChange, user}) {
       setReason={setReason}
       user={user}
       onClose={() => onOpenChange(false)}
+      onSuccess={onSuccess}
       className="px-4"
     />
   );
@@ -89,7 +88,7 @@ export function DeleteUser({open, onOpenChange, user}) {
   )
 }
 
-function DeleteUserForm({ reason, setReason, user, onClose, className }) {
+function DeleteUserForm({ reason, setReason, user, onClose, className, onSuccess }) {
   const [isSubmitting, setIsSubmitting] = React.useState(false);
 
 
@@ -102,8 +101,8 @@ function DeleteUserForm({ reason, setReason, user, onClose, className }) {
 
 try {
   console.log("restricting user:", user.userId, reason);
-      await restrictUserByAdmin(user.userId, reason)
-  
+      await restrictUserByAdmin(user.userId, reason);
+      onSuccess(user.userId);
       onClose();
 } catch (error) {
   console.error("failed to restrict user:", error);

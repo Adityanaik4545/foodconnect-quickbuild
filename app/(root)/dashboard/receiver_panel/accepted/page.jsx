@@ -40,11 +40,11 @@ const page = () => {
       "
     >
       {/* subtle background glow */}
-      <div className="absolute inset-0 bg-gradient-to-br from-emerald-50/50 via-transparent to-transparent pointer-events-none" />
+      <div className="absolute inset-0 bg-linear-to-br from-emerald-50/50 via-transparent to-transparent pointer-events-none" />
 
       <div className="relative p-6 flex gap-6">
         {/* LEFT ICON */}
-        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-emerald-100 to-green-100 flex items-center justify-center shadow-inner flex-shrink-0">
+        <div className="w-14 h-14 rounded-xl bg-linear-to-br from-emerald-100 to-green-100 flex items-center justify-center shadow-inner shrink-0">
           <CheckCircle2 className="w-7 h-7 text-emerald-600" />
         </div>
 

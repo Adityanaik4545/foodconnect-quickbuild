@@ -3,7 +3,7 @@
 import AdminGuard from '../../../../components/AdminGuard'
 import React, { useEffect, useState } from 'react'
 import { getAllDonationsForAdmin, getDonationStats } from '@/app/actions/adminStats'
-import { Search, Gift, Filter, Clock, CheckCircle2, MapPin, User } from 'lucide-react'
+import { Search, Gift, MapPin} from 'lucide-react'
 
 const DonationsPage = () => {
   const [donations, setDonations] = useState([])
@@ -99,7 +99,7 @@ const DonationsPage = () => {
   if (loading) {
     return (
       <AdminGuard>
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100">
           <div className="text-center">
             <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-slate-600 font-medium">Loading donations...</p>
@@ -111,7 +111,7 @@ const DonationsPage = () => {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-50 p-6">
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Manage Donations</h1>
@@ -230,7 +230,7 @@ const DonationsPage = () => {
                       </td>
                       <td className="px-6 py-4">
                         <div className="flex items-start gap-1 text-sm text-gray-600">
-                          <MapPin size={16} className="mt-0.5 flex-shrink-0" />
+                          <MapPin size={16} className="mt-0.5 shrink-0" />
                           <span className="line-clamp-2">{donation.address || 'N/A'}</span>
                         </div>
                       </td>

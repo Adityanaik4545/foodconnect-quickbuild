@@ -3,7 +3,7 @@
 import AdminGuard from '../../../../components/AdminGuard'
 import React, { useEffect, useState } from 'react'
 import { getAllDonors } from '@/app/actions/adminStats'
-import { Search, Heart, Phone, MapPin, Gift } from 'lucide-react'
+import { Search, Heart, Phone, MapPin } from 'lucide-react'
 
 const DonorsPage = () => {
     const [donors, setDonors] = useState([])
@@ -78,7 +78,7 @@ const DonorsPage = () => {
     if (loading) {
         return (
             <AdminGuard>
-                <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+                <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100">
                     <div className="text-center">
                         <div className="w-16 h-16 border-4 border-green-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
                         <p className="text-slate-600 font-medium">Loading donors...</p>
@@ -90,7 +90,7 @@ const DonorsPage = () => {
 
     return (
         <AdminGuard>
-            <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6">
+            <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-50 p-6">
                 {/* Header */}
                 <div className="mb-6">
                     <h1 className="text-3xl font-bold text-gray-800 mb-2">Manage Donors</h1>

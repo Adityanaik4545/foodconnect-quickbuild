@@ -1,9 +1,8 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Home, Menu, User, Package, LogOut, MapPin, Clock, CheckCircle2, Search, Filter } from 'lucide-react';
-import { getAvailableDonations, acceptDonation, getReceiverAcceptedDonations } from '@/app/actions/donations';
-import { signOut } from '@/lib/auth-client';
+import { Package, MapPin, CheckCircle2 } from 'lucide-react';
+import { getAvailableDonations, acceptDonation } from '@/app/actions/donations';
 import { useRouter } from 'next/navigation';
 import { getUserRole } from '@/app/actions/getUserRole';
 
@@ -84,7 +83,7 @@ export default function ReceiverDashboard() {
 
   if (loading || roleCheck) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600 font-medium">Loading available meals...</p>
@@ -94,7 +93,7 @@ export default function ReceiverDashboard() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-50">
       {/* Main Container */}
       <div className="flex min-h-screen">
         {/* Sidebar */}
@@ -109,40 +108,6 @@ export default function ReceiverDashboard() {
                 Available Meals
               </h1>
             </div>
-
-            {/* Stats Cards */}
-            {/* <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-medium text-slate-600">Available</h3>
-                  <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center">
-                    <Package className="w-6 h-6 text-orange-600" />
-                  </div>
-                </div>
-                <p className="text-4xl font-bold text-slate-900">{availableDonations.length}</p>
-                <p className="text-xs text-slate-500 mt-2">Meals ready to accept</p>
-              </div>
-              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-medium text-slate-600">Accepted</h3>
-                  <div className="w-12 h-12 rounded-xl bg-emerald-100 flex items-center justify-center">
-                    <CheckCircle2 className="w-6 h-6 text-emerald-600" />
-                  </div>
-                </div>
-                <p className="text-4xl font-bold text-slate-900">{acceptedDonations.length}</p>
-                <p className="text-xs text-slate-500 mt-2">Meals you've accepted</p>
-              </div>
-              <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-sm font-medium text-slate-600">Total</h3>
-                  <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center">
-                    <Clock className="w-6 h-6 text-slate-600" />
-                  </div>
-                </div>
-                <p className="text-4xl font-bold text-slate-900">{availableDonations.length + acceptedDonations.length}</p>
-                <p className="text-xs text-slate-500 mt-2">All meals</p>
-              </div>
-            </div> */}
 
             {/* Donations List */}
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm">
@@ -162,12 +127,12 @@ export default function ReceiverDashboard() {
     "
   >
     {/* subtle background glow */}
-    <div className="absolute inset-0 bg-gradient-to-br from-orange-50/40 via-transparent to-transparent pointer-events-none" />
+    <div className="absolute inset-0 bg-linear-to-br from-orange-50/40 via-transparent to-transparent pointer-events-none" />
 
     <div className="relative p-6 flex items-start justify-between gap-6">
       {/* LEFT CONTENT */}
       <div className="flex gap-4 flex-1 min-w-0">
-        <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-orange-100 to-amber-100 flex items-center justify-center shadow-inner">
+        <div className="w-14 h-14 rounded-xl bg-linear-to-br from-orange-100 to-amber-100 flex items-center justify-center shadow-inner">
           <Package className="w-7 h-7 text-orange-600" />
         </div>
 
@@ -227,7 +192,7 @@ export default function ReceiverDashboard() {
             flex items-center gap-2
             px-7 py-3
             rounded-full
-            bg-gradient-to-r from-orange-500 to-amber-400
+            bg-linear-to-r from-orange-500 to-amber-400
             text-white font-semibold
             shadow-lg shadow-orange-300/40
             hover:scale-[1.03]
@@ -261,7 +226,7 @@ export default function ReceiverDashboard() {
     text-center
   ">
     {/* Glow / decoration */}
-    <div className="absolute inset-0 rounded-3xl bg-gradient-to-br from-orange-100/40 via-transparent to-orange-200/30 pointer-events-none" />
+    <div className="absolute inset-0 rounded-3xl bg-linear-to-br from-orange-100/40 via-transparent to-orange-200/30 pointer-events-none" />
 
     {/* Icon bubble */}
     <div className="
@@ -269,7 +234,7 @@ export default function ReceiverDashboard() {
       mx-auto mb-6
       w-20 h-20
       rounded-full
-      bg-gradient-to-br from-orange-400 to-amber-400
+      bg-linear-to-br from-orange-400 to-amber-400
       flex items-center justify-center
       shadow-lg shadow-orange-300/40
       animate-[float_6s_ease-in-out_infinite]

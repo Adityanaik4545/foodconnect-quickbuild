@@ -5,7 +5,6 @@ import React, { useEffect, useState } from 'react'
 import { getAllUsers } from '@/app/actions/adminStats'
 import { Search, Users, Phone, MapPin, Heart, ShoppingBag, UserCheck } from 'lucide-react'
 import { DeleteUser } from '@/components/DeleteUser';
-import { asc } from 'drizzle-orm';
 import { unrestrictUserByAdmin } from '@/app/actions/admin';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -31,6 +30,8 @@ const UsersPage = () => {
   const loadUsers = async () => {
     try {
       const data = await getAllUsers()
+      console.log("user info ->", data);
+
       setUsers(data)
       setFilteredUsers(data)
     } catch (error) {
@@ -93,7 +94,7 @@ const UsersPage = () => {
   if (loading) {
     return (
       <AdminGuard>
-        <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+        <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100">
           <div className="text-center">
             <div className="w-16 h-16 border-4 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
             <p className="text-slate-600 font-medium">Loading users...</p>
@@ -105,7 +106,7 @@ const UsersPage = () => {
 
   return (
     <AdminGuard>
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50 p-6">
+      <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-50 p-6">
         {/* Header */}
         <div className="mb-6">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Manage Users</h1>
@@ -223,7 +224,7 @@ const UsersPage = () => {
                       <td className="px-6 py-4">
                         {user.address ? (
                           <div className="flex items-start gap-1 text-sm text-gray-700">
-                            <MapPin size={14} className="text-gray-400 mt-0.5 flex-shrink-0" />
+                            <MapPin size={14} className="text-gray-400 mt-0.5 shrink-0" />
                             <span className="line-clamp-1">{user.address}</span>
                           </div>
                         ) : (
@@ -238,7 +239,16 @@ const UsersPage = () => {
                           <Button
                             variant="link"
                             className=" text-emerald-600 hover:text-emerald-700 text-sm font-medium"
-                            onClick={() => unrestrictUserByAdmin(user.userId)}
+                            onClick={async () => {
+                              await unrestrictUserByAdmin(user.userId); await loadUsers();
+                              setUsers(prev =>
+                                prev.map(u =>
+                                  u.userId === user.userId
+                                    ? { ...u, isRestricted: false }
+                                    : u
+                                )
+                              );
+                            }}
                           >
                             Unrestrict
                           </Button>
@@ -295,6 +305,15 @@ const UsersPage = () => {
           open={openDelete}
           onOpenChange={setOpenDelete}
           user={selectedUser}
+          onSuccess={(userId)=>{
+            setUsers(prev =>
+              prev.map(u =>
+                u.userId === userId
+                ? { ...u, isRestricted: true }
+                : u
+              )
+            )
+          }}
         />
       )}
     </AdminGuard>

@@ -1,13 +1,12 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Home, Menu, User, Calendar, Package, Plus, LogOut, TrendingUp, Clock, MapPin, CheckCircle2, Users } from 'lucide-react';
+import {  Package, Plus, Clock, MapPin, Users } from 'lucide-react';
 import { getDonorDonations } from '@/app/actions/donations';
 import { signOut, useSession } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
 import ListFoodForm from '../../../../components/ListFoodForm';
 import { getUserRole } from '@/app/actions/getUserRole';
-import Image from 'next/image';
 
 export default function DonorDashboard() {
   const [donations, setDonations] = useState([]);
@@ -55,15 +54,6 @@ export default function DonorDashboard() {
     }
   };
 
-  const handleLogout = async () => {
-    try {
-      await signOut();
-      router.push('/login');
-    } catch (error) {
-      console.error('Error logging out:', error);
-    }
-  };
-
   const formatDate = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
@@ -92,7 +82,7 @@ export default function DonorDashboard() {
 
   if (loading || roleCheck) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600 font-medium">Loading your donations...</p>
@@ -115,7 +105,7 @@ export default function DonorDashboard() {
           }}
         >
           {/* Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-900/60 via-emerald-800/40 to-transparent" />
+          <div className="absolute inset-0 bg-linear-to-br from-emerald-900/60 via-emerald-800/40 to-transparent" />
 
           {/* Content */}
           <div className="relative z-10 max-w-xl text-white">
@@ -132,7 +122,7 @@ export default function DonorDashboard() {
               className="
         inline-flex items-center gap-2
         px-6 py-3 rounded-full
-        bg-gradient-to-r from-emerald-600 to-emerald-400
+        bg-linear-to-r from-emerald-600 to-emerald-400
         text-white font-medium
         shadow-lg shadow-emerald-500/40
         hover:from-emerald-700 hover:to-emerald-500
@@ -326,7 +316,7 @@ export default function DonorDashboard() {
                   onClick={() => setShowListFoodForm(true)}
                   className="
             inline-flex items-center gap-2 px-7 py-3
-            bg-gradient-to-r from-emerald-500 to-emerald-400
+            bg-linear-to-r from-emerald-500 to-emerald-400
             text-white rounded-full font-semibold
             hover:from-emerald-600 hover:to-emerald-500
             shadow-lg shadow-emerald-500/30

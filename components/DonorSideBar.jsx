@@ -64,7 +64,7 @@ const DonorSideBar = () => {
     h-10 w-10
     flex items-center justify-center
     rounded-full
-    bg-gradient-to-br from-emerald-500 to-emerald-500
+    bg-linear-to-br from-emerald-500 to-emerald-500
     text-white font-semibold
     shadow-sm
     overflow-hidden
@@ -99,13 +99,6 @@ const DonorSideBar = () => {
                 </button>
               )}
             </div>
-            {/* <button 
-              onClick={handleLogout}
-              className="w-full flex items-center gap-3 px-4 py-3 rounded-xl text-red-600 font-medium transition-all hover:bg-red-50 mt-auto border border-red-200"
-            >
-              <LogOut className="w-5 h-5" />
-              Log Out
-            </button> */}
           </div>
         </aside>
 }

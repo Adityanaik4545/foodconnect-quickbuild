@@ -1,9 +1,8 @@
 "use client";
 
-import { ArrowBigLeft, ArrowLeft, LogOut, ShieldCheck } from "lucide-react";
+import { ArrowBigLeft, LogOut, ShieldCheck } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { ArrowUpIcon } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/button";
 import { signOut } from "@/lib/auth-client";
 
 export default function AdminLayout({ children }) {

@@ -5,13 +5,13 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function AdminGuard({ children }) {
-  const { data: session, isPending } = useSession();  // ← correct for your version
+  const { data: session, isPending } = useSession();  // correct for your version
   const router = useRouter();
 
   const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    if (isPending) return; // 🚀 wait until session is loaded
+    if (isPending) return; // wait until session is loaded
 
     console.log("SESSION →", session);
 
@@ -27,7 +27,7 @@ export default function AdminGuard({ children }) {
       return;
     }
 
-    setChecked(true); // 🚀 allowed
+    setChecked(true); // allowed
   }, [session, isPending, router]);
 
   if (isPending || !checked) {

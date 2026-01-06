@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { User, Phone, MapPin, Mail, ArrowLeft, Edit2, Save, X, LogOutIcon } from 'lucide-react';
+import { User, Phone, MapPin, Mail, Edit2, Save, X, LogOutIcon } from 'lucide-react';
 import { getUserProfile } from '@/app/actions/getUserProfile';
 import { useRouter } from 'next/navigation';
 import { updateUserProfile } from '@/app/actions/updateUserProfile';
@@ -73,7 +73,7 @@ export default function DonorProfile() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-slate-100">
+      <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-slate-50 to-slate-100">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-emerald-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
           <p className="text-slate-600 font-medium">Loading profile...</p>
@@ -83,7 +83,7 @@ export default function DonorProfile() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-slate-50">
+    <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-50">
       <div className="flex min-h-screen">
         {/* Sidebar - Same as donor dashboard */}
 
@@ -103,7 +103,7 @@ export default function DonorProfile() {
                 {/* Profile Header */}
                 <div className="flex items-center justify-between mb-8 pb-8 border-b border-slate-200">
                   <div className="flex items-center gap-6">
-                    <div className="w-24 h-24 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg">
+                    <div className="w-24 h-24 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg">
                       <User className="w-12 h-12 text-white" />
                     </div>
                     <div>
@@ -177,7 +177,7 @@ export default function DonorProfile() {
                 <div className="space-y-6">
                   {/* Phone Number */}
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center shrink-0">
                       <Phone className="w-6 h-6 text-blue-600" />
                     </div>
                     <div className="flex-1">
@@ -204,7 +204,7 @@ export default function DonorProfile() {
 
                   {/* Address */}
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-orange-100 flex items-center justify-center shrink-0">
                       <MapPin className="w-6 h-6 text-orange-600" />
                     </div>
                     <div className="flex-1">
@@ -231,7 +231,7 @@ export default function DonorProfile() {
 
                   {/* Email (Read-only) */}
                   <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center flex-shrink-0">
+                    <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center shrink-0">
                       <Mail className="w-6 h-6 text-slate-600" />
                     </div>
                     <div className="flex-1">
