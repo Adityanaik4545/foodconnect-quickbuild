@@ -16,7 +16,7 @@ const DonorSideBar = () => {
           <div className="p-6 space-y-6">
             {/* Logo/Brand */}
             <div className='mt-auto p-2 space-y-4 border-b border-slate-200'>
-              <Image src="/assets/logo/foodconnect_main.png" width={200} height={200} alt='logo' />
+              <Image src="/assets/logo/app_logo.png" width={400} height={120} alt='logo' />
             </div>
 
             {/* Navigation */}

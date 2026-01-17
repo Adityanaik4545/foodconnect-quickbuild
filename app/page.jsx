@@ -30,7 +30,7 @@ const Navbar = () => {
         <div className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center space-x-2">
-          <Image src="/assets/logo/foodconnect_main.png" height={200} width={200} alt='logo'/>
+            <Image src="/assets/logo/app_logo.png" width={400} height={120} alt='logo' className='w-50' />
           </Link>
 
           {/* Desktop Menu */}

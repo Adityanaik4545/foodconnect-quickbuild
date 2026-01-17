@@ -5,7 +5,8 @@ import { User, Phone, MapPin, Mail, Edit2, Save, X, LogOutIcon } from 'lucide-re
 import { getUserProfile } from '@/app/actions/getUserProfile';
 import { useRouter } from 'next/navigation';
 import { updateUserProfile } from '@/app/actions/updateUserProfile';
-import { signOut } from '@/lib/auth-client';
+import { signOut, useSession } from '@/lib/auth-client';
+import Image from 'next/image';
 
 export default function DonorProfile() {
   const [profile, setProfile] = useState(null);
@@ -18,6 +19,8 @@ export default function DonorProfile() {
   });
   const [saving, setSaving] = useState(false);
   const router = useRouter();
+  const {data: session} = useSession();
+  const user = session?.user;
 
   useEffect(() => {
     loadProfile();
@@ -80,7 +83,9 @@ export default function DonorProfile() {
         </div>
       </div>
     );
+
   }
+  const imgSrc = user?.image &&  user.image.trim() !== "" ? user?.image : '/assets/image/dummy.jpg';
 
   return (
     <div className="min-h-screen bg-linear-to-br from-slate-50 via-white to-slate-50">
@@ -103,9 +108,7 @@ export default function DonorProfile() {
                 {/* Profile Header */}
                 <div className="flex items-center justify-between mb-8 pb-8 border-b border-slate-200">
                   <div className="flex items-center gap-6">
-                    <div className="w-24 h-24 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center shadow-lg">
-                      <User className="w-12 h-12 text-white" />
-                    </div>
+                      <Image src={imgSrc} width={96} height={96} alt='image' className='rounded-2xl'/>
                     <div>
                       <h2 className="text-2xl font-bold text-slate-900 mb-1">
                         {isEditing ? (

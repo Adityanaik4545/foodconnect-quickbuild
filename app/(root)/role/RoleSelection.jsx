@@ -33,8 +33,8 @@ export default function RoleSelection() {
       <div className="max-w-4xl w-full">
         {/* Logo/Brand */}
         <div className="text-center mb-25">
-          <div className="inline-flex items-center justify-center rounded-2xl shadow-lg mb-6">
-            <Image src="/assets/logo/foodconnect_main.png" width={300} height={200} alt='logo' />
+          <div className="inline-flex items-center justify-center rounded-2xl mb-6">
+          <Image src="/assets/logo/app_logo.png" width={400} height={120} alt='logo' className='w-60' />
           </div>
           <h1 className="text-5xl font-bold text-slate-900 mt-20">Why are you here?</h1>
           <p className="text-xl text-slate-600"></p>
@@ -46,7 +46,7 @@ export default function RoleSelection() {
           <button
             onClick={() => handleRoleSelect('donor')}
             disabled={loading}
-            className="group relative bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-emerald-500 transition-all hover:shadow-xl text-left disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group relative bg-white rounded-2xl p-8 shadow-xl border-slate-200 hover:border-emerald-500 transition-all hover:shadow-2xl text-left disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <div className="flex flex-col items-center text-center">
               <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-emerald-500 to-teal-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">
@@ -67,7 +67,7 @@ export default function RoleSelection() {
           <button
             onClick={() => handleRoleSelect('receiver')}
             disabled={loading}
-            className="group relative bg-white rounded-2xl p-8 border-2 border-slate-200 hover:border-orange-500 transition-all hover:shadow-xl text-left disabled:opacity-50 disabled:cursor-not-allowed"
+            className="group relative bg-white shadow-xl rounded-2xl p-8  border-slate-200 hover:border-orange-500 transition-all hover:shadow-2xl text-left disabled:opacity-50 disabled:cursor-not-allowed"
           >
             <div className="flex flex-col items-center text-center">
               <div className="w-20 h-20 rounded-2xl bg-linear-to-br from-orange-500 to-amber-600 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform">

@@ -16,7 +16,7 @@ const ReceiverSideBar = () => {
         <div className="p-6 space-y-6">
             {/* Logo/Brand */}
             <div className='mt-auto space-y-4 border-b border-slate-200'>
-                <Image src="/assets/logo/orange_primary.png" width={200} height={200} alt='logo' />
+                <Image src="/assets/logo/app_logo.png" width={400} height={120} alt='logo' />
             </div>
 
 
