@@ -3,11 +3,17 @@
 import React, { useState } from 'react';
 import { X } from 'lucide-react';
 import { createDonation } from '@/app/actions/donations';
+import FoodTypeSelect from './FoodTypeSelect';
+import RawFoodFields from './RawFoodFields';
+import CookedFields from './CookedFields';
+import PackedFields from './PackedFields';
+import LocationFields from './LocationFields';
 
 export default function ListFoodForm({ onClose }) {
   const [formData, setFormData] = useState({
     mealName: '',
     preparedTime: '',
+
     quantity: '',
     type: '',
     category: '',
@@ -18,6 +24,9 @@ export default function ListFoodForm({ onClose }) {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  const [step, setStep] = useState(1);
+  const [foodCategory, setFoodCategory] = useState(null);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,6 +66,19 @@ export default function ListFoodForm({ onClose }) {
       [e.target.name]: e.target.value,
     });
   };
+  const canProceedFromStep2 = () => {
+  if (foodCategory === "cooked") {
+    return formData.mealName && formData.preparedTime && formData.quantity;
+  }
+  if (foodCategory === "raw") {
+    return formData.mealName && formData.quantity;
+  }
+  if (foodCategory === "packed") {
+    return formData.mealName && formData.quantity;
+  }
+  return false;
+};
+
 
   return (
     <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
@@ -81,7 +103,26 @@ export default function ListFoodForm({ onClose }) {
             </div>
           )}
 
-          <div>
+          {step === 1 && (<FoodTypeSelect onSelect={(kind)=>{
+            setFoodCategory(kind)
+            setFormData((prev) => ({...prev, category: kind}))
+            setStep(2);
+          }} />)}
+
+          {step === 2 && foodCategory === "raw" && (
+            <RawFoodFields formData={formData} setFormData={setFormData}/>
+          )}
+          {step === 2 && foodCategory === "cooked" && (
+            <CookedFields formData={formData} setFormData={setFormData} />
+          )}
+          {step === 2 && foodCategory === "packed" && (
+            <PackedFields formData={formData} setFormData={setFormData}/>
+          )}
+          {step === 3  && (
+            <LocationFields formData={formData} setFormData={setFormData} />
+          )}
+{/* fields for food details */}
+          {/* <div>
             <label className="block text-sm font-semibold mb-2 text-slate-900">
               Meal Name <span className="text-red-500">*</span>
             </label>
@@ -190,9 +231,9 @@ export default function ListFoodForm({ onClose }) {
               className="w-full px-4 py-3 border border-slate-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all"
               placeholder="Pickup address"
             />
-          </div>
+          </div> */}
 
-          <div className="grid grid-cols-2 gap-4">
+          {/* <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-semibold mb-2 text-slate-900">
                 Latitude (optional)
@@ -220,24 +261,68 @@ export default function ListFoodForm({ onClose }) {
                 placeholder="e.g., -74.0060"
               />
             </div>
-          </div>
+          </div> */}
+          
 
-          <div className="flex gap-4 pt-4 border-t border-slate-200">
-            <button
-              type="button"
-              onClick={onClose}
-              className="flex-1 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all"
-            >
-              Cancel
-            </button>
-            <button
-              type="submit"
-              disabled={loading}
-              className="flex-1 px-6 py-3 bg-emerald-500 text-white rounded-xl font-semibold hover:bg-emerald-600 transition-all shadow-md hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              {loading ? 'Creating...' : 'List Food'}
-            </button>
-          </div>
+{/* ACTION BUTTONS */}
+<div className="flex gap-4 pt-4 border-t border-slate-200">
+
+  {/* STEP 1 → NO ACTION BUTTONS */}
+  {step === 1 && (
+    <button
+      type="button"
+      onClick={onClose}
+      className="w-full px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all"
+    >
+      Cancel
+    </button>
+  )}
+
+  {/* STEP 2 → BACK + NEXT */}
+  {step === 2 && (
+    <>
+      <button
+        type="button"
+        onClick={() => setStep(1)}
+        className="flex-1 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all"
+      >
+        Back
+      </button>
+
+      <button
+        type="button"
+        onClick={() => setStep(3)}
+         disabled={!canProceedFromStep2()}
+        className="flex-1 px-6 py-3 bg-emerald-500 text-white rounded-xl font-semibold hover:bg-emerald-600 transition-all"
+      >
+        Next
+      </button>
+    </>
+  )}
+
+  {/* STEP 3 → BACK + SUBMIT */}
+  {step === 3 && (
+    <>
+      <button
+        type="button"
+        onClick={() => setStep(2)}
+        className="flex-1 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all"
+      >
+        Back
+      </button>
+
+      <button
+        type="submit"
+        disabled={loading}
+        className="flex-1 px-6 py-3 bg-emerald-500 text-white rounded-xl font-semibold hover:bg-emerald-600 transition-all disabled:opacity-50"
+      >
+        {loading ? "Creating..." : "List Food"}
+      </button>
+    </>
+  )}
+
+</div>
+
         </form>
       </div>
     </div>
