@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from 'react';
-import { Package, Edit2, Trash2, MapPin, Clock, Search, X} from 'lucide-react';
+import { Package, Edit2, Trash2, MapPin, Clock, Search, X, MessageCircleWarningIcon, MessageCircleWarning } from 'lucide-react';
 import { getDonorDonations, updateDonation, deleteDonation } from '@/app/actions/donations';
 
 const FoodListPage = () => {
@@ -22,6 +22,8 @@ const FoodListPage = () => {
     try {
       setLoading(true);
       const data = await getDonorDonations();
+      console.log(data);
+
       setDonations(data);
     } catch (error) {
       console.error('Failed to fetch donations:', error);
@@ -38,6 +40,18 @@ const FoodListPage = () => {
   const formatTime = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
+  };
+
+    const formatDateTime = (dateString) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   const handleDelete = async (id) => {
@@ -83,7 +97,7 @@ const FoodListPage = () => {
   // Filter donations
   const filteredDonations = donations.filter(donation => {
     const matchesSearch = donation.mealName.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         donation.description.toLowerCase().includes(searchQuery.toLowerCase());
+      donation.description.toLowerCase().includes(searchQuery.toLowerCase());
     const matchesFilter = filterStatus === 'all' || donation.status === filterStatus;
     return matchesSearch && matchesFilter;
   });
@@ -117,174 +131,185 @@ const FoodListPage = () => {
             <>
               {/* Search and Filter */}
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 mb-6">
-          <div className="flex gap-4 items-center">
-            <div className="flex-1 relative">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-              <input
-                type="text"
-                placeholder="Search by meal name or description..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all"
-              />
-            </div>
-            <div className="flex gap-2">
-              <button
-                onClick={() => setFilterStatus('all')}
-                className={`px-4 py-3 rounded-xl font-medium transition-all ${
-                  filterStatus === 'all'
-                    ? 'bg-emerald-500 text-white shadow-md'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                All
-              </button>
-              <button
-                onClick={() => setFilterStatus('available')}
-                className={`px-4 py-3 rounded-xl font-medium transition-all ${
-                  filterStatus === 'available'
-                    ? 'bg-emerald-500 text-white shadow-md'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                Available
-              </button>
-              <button
-                onClick={() => setFilterStatus('claimed')}
-                className={`px-4 py-3 rounded-xl font-medium transition-all ${
-                  filterStatus === 'claimed'
-                    ? 'bg-emerald-500 text-white shadow-md'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                Claimed
-              </button>
-              <button
-                onClick={() => setFilterStatus('completed')}
-                className={`px-4 py-3 rounded-xl font-medium transition-all ${
-                  filterStatus === 'completed'
-                    ? 'bg-emerald-500 text-white shadow-md'
-                    : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
-                }`}
-              >
-                Completed
-              </button>
-            </div>
-          </div>
-        </div>
+                <div className="flex gap-4 items-center">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                    <input
+                      type="text"
+                      placeholder="Search by meal name or description..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none transition-all"
+                    />
+                  </div>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setFilterStatus('all')}
+                      className={`px-4 py-3 rounded-xl font-medium transition-all ${filterStatus === 'all'
+                          ? 'bg-emerald-500 text-white shadow-md'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                    >
+                      All
+                    </button>
+                    <button
+                      onClick={() => setFilterStatus('available')}
+                      className={`px-4 py-3 rounded-xl font-medium transition-all ${filterStatus === 'available'
+                          ? 'bg-emerald-500 text-white shadow-md'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                    >
+                      Available
+                    </button>
+                    <button
+                      onClick={() => setFilterStatus('claimed')}
+                      className={`px-4 py-3 rounded-xl font-medium transition-all ${filterStatus === 'claimed'
+                          ? 'bg-emerald-500 text-white shadow-md'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                    >
+                      Claimed
+                    </button>
+                    <button
+                      onClick={() => setFilterStatus('completed')}
+                      className={`px-4 py-3 rounded-xl font-medium transition-all ${filterStatus === 'completed'
+                          ? 'bg-emerald-500 text-white shadow-md'
+                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        }`}
+                    >
+                      Completed
+                    </button>
+                  </div>
+                </div>
+              </div>
 
-        {/* Food Items Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {filteredDonations.map((donation) => (
-            <div
-              key={donation.id}
-              className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all overflow-hidden group"
-            >
-              {/* Card Header */}
-              <div className="p-6 border-b border-slate-100">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-start gap-4">
-                    <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${
-                      donation.status === 'available' ? 'bg-emerald-100' : 
-                      donation.status === 'claimed' ? 'bg-orange-100' : 
-                      'bg-slate-100'
-                    }`}>
-                      <Package className={`w-7 h-7 ${
-                        donation.status === 'available' ? 'text-emerald-600' : 
-                        donation.status === 'claimed' ? 'text-orange-600' : 
-                        'text-slate-600'
-                      }`} />
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-bold text-slate-900 mb-1">
-                        {donation.mealName}
-                      </h3>
-                      <div className="flex items-center gap-2">
-                        <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                          donation.status === 'available' ? 'bg-emerald-100 text-emerald-700' : 
-                          donation.status === 'claimed' ? 'bg-orange-100 text-orange-700' : 
-                          'bg-slate-100 text-slate-700'
-                        }`}>
-                          {donation.status.toUpperCase()}
-                        </span>
-                        <span className="text-sm text-slate-500">
-                          {donation.type} • {donation.category}
-                        </span>
+              {/* Food Items Grid */}
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {filteredDonations.map((donation) => (
+                  <div
+                    key={donation.id}
+                    className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all overflow-hidden group"
+                  >
+                    {/* Card Header */}
+                    <div className="p-6 border-b border-slate-100">
+                      <div className="flex items-start justify-between mb-3">
+                        <div className="flex items-start gap-4">
+                          <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${donation.status === 'available' ? 'bg-emerald-100' :
+                              donation.status === 'claimed' ? 'bg-orange-100' :
+                                'bg-slate-100'
+                            }`}>
+                            <Package className={`w-7 h-7 ${donation.status === 'available' ? 'text-emerald-600' :
+                                donation.status === 'claimed' ? 'text-orange-600' :
+                                  'text-slate-600'
+                              }`} />
+                          </div>
+                          <div>
+                            <h3 className="text-xl font-bold text-slate-900 mb-1">
+                              {donation.mealName}
+                            </h3>
+                            <div className="flex items-center gap-2">
+                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${donation.status === 'available' ? 'bg-emerald-100 text-emerald-700' :
+                                  donation.status === 'claimed' ? 'bg-orange-100 text-orange-700' :
+                                    'bg-slate-100 text-slate-700'
+                                }`}>
+                                {donation.status.toUpperCase()}
+                              </span>
+                              <span className="text-sm text-slate-500">
+                                {donation.type} • {donation.category}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
-                  </div>
+
+                    {/* Card Body */}
+                    <div className="p-6 space-y-4">
+                      <p className="text-slate-700">{donation.description}</p>
+
+                      <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                        <div>
+                          <p className="text-xs text-slate-500 mb-1">Quantity</p>
+                          <p className="text-lg font-semibold text-slate-900">{donation.quantity} servings</p>
+                        </div>
+                        <div>
+                          <p className="text-xs text-slate-500 mb-1">Listed on</p>
+                          <p className="text-lg font-semibold text-slate-900">{formatDate(donation.createdAt)}</p>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2 pt-2">
+                        <div className="flex items-center gap-2 text-sm text-slate-600">
+                          <MapPin className="w-4 h-4 text-slate-400" />
+                          <span className="truncate">{donation.address}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-sm text-slate-600">
+                          {donation.preparedTime && (
+                            <div className='flex gap-2'>
+                              <Clock className="w-4 h-4 text-slate-400" />
+                              <span>Prepared: {formatDateTime(donation.preparedTime)}</span>
+                            </div>
+                          )}
+                          {donation.expiresAt && (
+                            <div className='flex gap-2'>
+                              <MessageCircleWarning className="w-4 h-4 text-slate-400" />
+                 {donation.category === "raw" ? (
+                <div>
+                   Use before {formatDateTime(donation.expiresAt)}
                 </div>
+              ) : (
+                <div>
+                  Expires on {formatDateTime(donation.expiresAt)}
+                </div>
+              )
+             }
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Card Footer - Actions */}
+                    <div className="p-6 bg-slate-50 border-t border-slate-100 flex gap-3">
+                      <button
+                        onClick={() => handleEdit(donation)}
+                        disabled={donation.status === 'completed'}
+                        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${donation.status === 'completed'
+                            ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
+                            : 'bg-white border border-slate-200 text-slate-700 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50'
+                          }`}
+                      >
+                        <Edit2 className="w-4 h-4" />
+                        Edit
+                      </button>
+                      <button
+                        onClick={() => setDeleteConfirm(donation.id)}
+                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all bg-white border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-500"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                        Delete
+                      </button>
+                    </div>
+                  </div>
+                ))}
               </div>
 
-              {/* Card Body */}
-              <div className="p-6 space-y-4">
-                <p className="text-slate-700">{donation.description}</p>
-                
-                <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
-                  <div>
-                    <p className="text-xs text-slate-500 mb-1">Quantity</p>
-                    <p className="text-lg font-semibold text-slate-900">{donation.quantity} servings</p>
+              {/* Empty State */}
+              {filteredDonations.length === 0 && (
+                <div className="bg-white rounded-2xl border border-slate-200 p-16 text-center">
+                  <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                    <Package className="w-10 h-10 text-slate-400" />
                   </div>
-                  <div>
-                    <p className="text-xs text-slate-500 mb-1">Listed on</p>
-                    <p className="text-lg font-semibold text-slate-900">{formatDate(donation.createdAt)}</p>
-                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-2">No items found</h3>
+                  <p className="text-slate-600">
+                    {searchQuery || filterStatus !== 'all'
+                      ? 'Try adjusting your search or filters'
+                      : 'Start by listing your first food donation!'}
+                  </p>
                 </div>
-
-                <div className="space-y-2 pt-2">
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <MapPin className="w-4 h-4 text-slate-400" />
-                    <span className="truncate">{donation.address}</span>
-                  </div>
-                  <div className="flex items-center gap-2 text-sm text-slate-600">
-                    <Clock className="w-4 h-4 text-slate-400" />
-                    <span>Prepared: {formatTime(donation.preparedTime)}</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Card Footer - Actions */}
-              <div className="p-6 bg-slate-50 border-t border-slate-100 flex gap-3">
-                <button
-                  onClick={() => handleEdit(donation)}
-                  disabled={donation.status === 'completed'}
-                  className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${
-                    donation.status === 'completed'
-                      ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-                      : 'bg-white border border-slate-200 text-slate-700 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50'
-                  }`}
-                >
-                  <Edit2 className="w-4 h-4" />
-                  Edit
-                </button>
-                <button
-                  onClick={() => setDeleteConfirm(donation.id)}
-                  className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all bg-white border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-500"
-                >
-                  <Trash2 className="w-4 h-4" />
-                  Delete
-                </button>
-              </div>
-            </div>
-          ))}
-        </div>
-
-        {/* Empty State */}
-        {filteredDonations.length === 0 && (
-          <div className="bg-white rounded-2xl border border-slate-200 p-16 text-center">
-            <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <Package className="w-10 h-10 text-slate-400" />
-            </div>
-            <h3 className="text-2xl font-bold text-slate-900 mb-2">No items found</h3>
-            <p className="text-slate-600">
-              {searchQuery || filterStatus !== 'all' 
-                ? 'Try adjusting your search or filters' 
-                : 'Start by listing your first food donation!'}
-            </p>
-          </div>
-        )}
-        </>
-        )}
+              )}
+            </>
+          )}
         </div>
       </div>
 
@@ -308,7 +333,7 @@ const FoodListPage = () => {
                 <input
                   type="text"
                   value={editingItem.mealName}
-                  onChange={(e) => setEditingItem({...editingItem, mealName: e.target.value})}
+                  onChange={(e) => setEditingItem({ ...editingItem, mealName: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
                 />
               </div>
@@ -319,7 +344,7 @@ const FoodListPage = () => {
                   <input
                     type="number"
                     value={editingItem.quantity}
-                    onChange={(e) => setEditingItem({...editingItem, quantity: parseInt(e.target.value)})}
+                    onChange={(e) => setEditingItem({ ...editingItem, quantity: parseInt(e.target.value) })}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
                   />
                 </div>
@@ -327,7 +352,7 @@ const FoodListPage = () => {
                   <label className="block text-sm font-medium text-slate-700 mb-2">Category</label>
                   <select
                     value={editingItem.category}
-                    onChange={(e) => setEditingItem({...editingItem, category: e.target.value})}
+                    onChange={(e) => setEditingItem({ ...editingItem, category: e.target.value })}
                     className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
                   >
                     <option>Breakfast</option>
@@ -342,7 +367,7 @@ const FoodListPage = () => {
                 <label className="block text-sm font-medium text-slate-700 mb-2">Description</label>
                 <textarea
                   value={editingItem.description}
-                  onChange={(e) => setEditingItem({...editingItem, description: e.target.value})}
+                  onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
                   rows={3}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none resize-none"
                 />
@@ -353,7 +378,7 @@ const FoodListPage = () => {
                 <input
                   type="text"
                   value={editingItem.address}
-                  onChange={(e) => setEditingItem({...editingItem, address: e.target.value})}
+                  onChange={(e) => setEditingItem({ ...editingItem, address: e.target.value })}
                   className="w-full px-4 py-3 rounded-xl border border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-200 outline-none"
                 />
               </div>

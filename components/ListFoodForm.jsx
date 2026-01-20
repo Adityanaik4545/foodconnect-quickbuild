@@ -13,7 +13,7 @@ export default function ListFoodForm({ onClose }) {
   const [formData, setFormData] = useState({
     mealName: '',
     preparedTime: '',
-
+    expiryInput: '',
     quantity: '',
     type: '',
     category: '',
@@ -34,15 +34,29 @@ export default function ListFoodForm({ onClose }) {
     setLoading(true);
 
     try {
-      if (!formData.mealName || !formData.preparedTime || !formData.quantity) {
-        setError('Please fill in all required fields');
+      if (!formData.mealName || !formData.quantity) {
+        setError("Please fill in all required fields");
         setLoading(false);
         return;
       }
 
+      if (formData.category === "cooked" && !formData.preparedTime) {
+        setError("Prepared time is required for cooked food");
+        setLoading(false);
+        return;
+      }
+
+
       await createDonation({
         mealName: formData.mealName,
-        preparedTime: new Date(formData.preparedTime),
+        preparedTime:
+          formData.category === "cooked"
+            ? new Date(formData.preparedTime)
+            : undefined,
+        expiryInput:
+          formData.category === "raw" || formData.category === "packed"
+            ? formData.expiryInput
+            : undefined,
         quantity: parseInt(formData.quantity),
         type: formData.type || undefined,
         category: formData.category || undefined,
@@ -51,6 +65,7 @@ export default function ListFoodForm({ onClose }) {
         latitude: formData.latitude || undefined,
         longitude: formData.longitude || undefined,
       });
+      console.log(formData);
 
       onClose();
     } catch (err) {
@@ -67,17 +82,17 @@ export default function ListFoodForm({ onClose }) {
     });
   };
   const canProceedFromStep2 = () => {
-  if (foodCategory === "cooked") {
-    return formData.mealName && formData.preparedTime && formData.quantity;
-  }
-  if (foodCategory === "raw") {
-    return formData.mealName && formData.quantity;
-  }
-  if (foodCategory === "packed") {
-    return formData.mealName && formData.quantity;
-  }
-  return false;
-};
+    if (foodCategory === "cooked") {
+      return formData.mealName && formData.preparedTime && formData.quantity;
+    }
+    if (foodCategory === "raw") {
+      return formData.mealName && formData.quantity;
+    }
+    if (foodCategory === "packed") {
+      return formData.mealName && formData.quantity;
+    }
+    return false;
+  };
 
 
   return (
@@ -103,25 +118,25 @@ export default function ListFoodForm({ onClose }) {
             </div>
           )}
 
-          {step === 1 && (<FoodTypeSelect onSelect={(kind)=>{
+          {step === 1 && (<FoodTypeSelect onSelect={(kind) => {
             setFoodCategory(kind)
-            setFormData((prev) => ({...prev, category: kind}))
+            setFormData((prev) => ({ ...prev, category: kind }))
             setStep(2);
           }} />)}
 
           {step === 2 && foodCategory === "raw" && (
-            <RawFoodFields formData={formData} setFormData={setFormData}/>
+            <RawFoodFields formData={formData} setFormData={setFormData} />
           )}
           {step === 2 && foodCategory === "cooked" && (
             <CookedFields formData={formData} setFormData={setFormData} />
           )}
           {step === 2 && foodCategory === "packed" && (
-            <PackedFields formData={formData} setFormData={setFormData}/>
+            <PackedFields formData={formData} setFormData={setFormData} />
           )}
-          {step === 3  && (
+          {step === 3 && (
             <LocationFields formData={formData} setFormData={setFormData} />
           )}
-{/* fields for food details */}
+          {/* fields for food details */}
           {/* <div>
             <label className="block text-sm font-semibold mb-2 text-slate-900">
               Meal Name <span className="text-red-500">*</span>
@@ -262,66 +277,66 @@ export default function ListFoodForm({ onClose }) {
               />
             </div>
           </div> */}
-          
 
-{/* ACTION BUTTONS */}
-<div className="flex gap-4 pt-4 border-t border-slate-200">
 
-  {/* STEP 1 → NO ACTION BUTTONS */}
-  {step === 1 && (
-    <button
-      type="button"
-      onClick={onClose}
-      className="w-full px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all"
-    >
-      Cancel
-    </button>
-  )}
+          {/* ACTION BUTTONS */}
+          <div className="flex gap-4 pt-4 border-t border-slate-200">
 
-  {/* STEP 2 → BACK + NEXT */}
-  {step === 2 && (
-    <>
-      <button
-        type="button"
-        onClick={() => setStep(1)}
-        className="flex-1 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all"
-      >
-        Back
-      </button>
+            {/* STEP 1 → NO ACTION BUTTONS */}
+            {step === 1 && (
+              <button
+                type="button"
+                onClick={onClose}
+                className="w-full px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all"
+              >
+                Cancel
+              </button>
+            )}
 
-      <button
-        type="button"
-        onClick={() => setStep(3)}
-         disabled={!canProceedFromStep2()}
-        className="flex-1 px-6 py-3 bg-emerald-500 text-white rounded-xl font-semibold hover:bg-emerald-600 transition-all"
-      >
-        Next
-      </button>
-    </>
-  )}
+            {/* STEP 2 → BACK + NEXT */}
+            {step === 2 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setStep(1)}
+                  className="flex-1 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all"
+                >
+                  Back
+                </button>
 
-  {/* STEP 3 → BACK + SUBMIT */}
-  {step === 3 && (
-    <>
-      <button
-        type="button"
-        onClick={() => setStep(2)}
-        className="flex-1 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all"
-      >
-        Back
-      </button>
+                <button
+                  type="button"
+                  onClick={() => setStep(3)}
+                  disabled={!canProceedFromStep2()}
+                  className="flex-1 px-6 py-3 bg-emerald-500 text-white rounded-xl font-semibold hover:bg-emerald-600 transition-all"
+                >
+                  Next
+                </button>
+              </>
+            )}
 
-      <button
-        type="submit"
-        disabled={loading}
-        className="flex-1 px-6 py-3 bg-emerald-500 text-white rounded-xl font-semibold hover:bg-emerald-600 transition-all disabled:opacity-50"
-      >
-        {loading ? "Creating..." : "List Food"}
-      </button>
-    </>
-  )}
+            {/* STEP 3 → BACK + SUBMIT */}
+            {step === 3 && (
+              <>
+                <button
+                  type="button"
+                  onClick={() => setStep(2)}
+                  className="flex-1 px-6 py-3 bg-slate-100 text-slate-700 rounded-xl font-semibold hover:bg-slate-200 transition-all"
+                >
+                  Back
+                </button>
 
-</div>
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="flex-1 px-6 py-3 bg-emerald-500 text-white rounded-xl font-semibold hover:bg-emerald-600 transition-all disabled:opacity-50"
+                >
+                  {loading ? "Creating..." : "List Food"}
+                </button>
+              </>
+            )}
+
+          </div>
 
         </form>
       </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import { Package, MapPin, CheckCircle2 } from 'lucide-react';
+import { Package, MapPin, CheckCircle2, LucideMessageCircleWarning, MessageCircleWarning, Clock } from 'lucide-react';
 import { getAvailableDonations, acceptDonation } from '@/app/actions/donations';
 import { useRouter } from 'next/navigation';
 import { getUserRole } from '@/app/actions/getUserRole';
@@ -40,6 +40,8 @@ export default function ReceiverDashboard() {
     try {
       const available = await getAvailableDonations();
       setAvailableDonations(available);
+      console.log(available);
+      
     } catch (error) {
       console.error('Error loading data:', error);
     } finally {
@@ -142,7 +144,7 @@ export default function ReceiverDashboard() {
           </h3>
 
           <p className="text-sm text-slate-500 mb-3">
-            Donated by <span className="font-medium">{donation.donorName}</span>
+            Listed by <span className="font-medium">{donation.donorName}</span>
           </p>
 
           <div className="flex flex-wrap items-center gap-3 text-sm mb-3">
@@ -178,8 +180,31 @@ export default function ReceiverDashboard() {
             </span>
 
             <span className="text-xs text-slate-500">
-              Listed {formatDate(donation.createdAt)}
+              Listed on {formatDate(donation.createdAt)}
             </span>
+
+            <div className="flex items-center gap-1 text-xs text-slate-500">
+            {donation.preparedTime ? (
+              <div className='flex gap-2'>
+                <Clock className="w-4 h-4" />
+                Prepared on {formatDateTime(donation.preparedTime)}
+              </div>
+                                        ) : (
+              <div className='flex gap-2 items-center'>
+              <MessageCircleWarning className="w-4 h-4" />
+              {donation.category === "raw" ? (
+                <div>
+                   Use before {formatDateTime(donation.expiresAt)}
+                </div>
+              ) : (
+                <div>
+                  Expires on {formatDateTime(donation.expiresAt)}
+                </div>
+              )
+             }
+             </div>
+          )}
+        </div>
           </div>
         </div>
       </div>
@@ -204,10 +229,10 @@ export default function ReceiverDashboard() {
           Accept
         </button>
 
-        <span className="flex items-center gap-1 text-sm text-orange-600">
+        {/* <span className="flex items-center gap-1 text-sm text-orange-600">
           <MapPin className="w-4 h-4" />
           1.5 km away
-        </span>
+        </span> */}
       </div>
     </div>
   </div>

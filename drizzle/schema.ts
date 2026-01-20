@@ -99,7 +99,7 @@ export const donation = pgTable("donation", {
     .references(() => user.id, { onDelete: "cascade" }),
 
   mealName: text("meal_name").notNull(),
-  preparedTime: timestamp("prepared_time").notNull(),
+  preparedTime: timestamp("prepared_time"),
   quantity: integer("quantity").notNull(),
 
   type: text("type"),          // eg: veg / non-veg
@@ -107,6 +107,7 @@ export const donation = pgTable("donation", {
 
   status: text("status").default("available"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
 
   description: text("description"),
 

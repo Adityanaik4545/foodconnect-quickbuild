@@ -55,7 +55,7 @@ const page = () => {
           </h3>
 
           <p className="text-sm text-slate-500 mb-3">
-            Donated by{" "}
+            Listed by{" "}
             <span className="font-medium">
               {donation.donorName || "Anonymous"}
             </span>

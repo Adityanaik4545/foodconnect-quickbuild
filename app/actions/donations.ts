@@ -2,7 +2,7 @@
 
 import { auth } from "@/lib/auth";
 import { db } from "@/drizzle/db";
-import { donation, acceptedDonation, userProfile, user as userTable} from "@/drizzle/schema";
+import { donation, acceptedDonation, userProfile, user as userTable } from "@/drizzle/schema";
 
 import { eq, desc, and, or } from "drizzle-orm";
 import { headers } from "next/headers";
@@ -52,6 +52,7 @@ export async function getDonorDonations() {
       address: don.address,
       description: don.description,
       createdAt: don.createdAt,
+      expiresAt: don.expiresAt,
 
       acceptedCount: acceptedForDonation.length,
 
@@ -92,7 +93,7 @@ export async function getAvailableDonations() {
 
   // Get user names for all donors
   const donorIds = [...new Set(donationsResult.map(d => d.donorId))];
-  
+
   // Create a map of donor IDs to names
   const donorMap = new Map<string, string>();
   // Fetch users individually to avoid type issues
@@ -119,6 +120,7 @@ export async function getAvailableDonations() {
     latitude: row.latitude,
     longitude: row.longitude,
     createdAt: row.createdAt,
+    expiresAt: row.expiresAt,
     donorName: donorMap.get(row.donorId) || "Anonymous",
   }));
 
@@ -146,6 +148,8 @@ export async function getAvailableDonations() {
       latitude: don.latitude,
       longitude: don.longitude,
       createdAt: don.createdAt,
+      expiresAt: don.expiresAt,
+
       donorName: don.donorName || "Anonymous",
     }));
 }
@@ -153,10 +157,11 @@ export async function getAvailableDonations() {
 // Create a new donation
 export async function createDonation(data: {
   mealName: string;
-  preparedTime: Date;
+  preparedTime?: string;
+  expiryInput?: string;
   quantity: number;
   type?: string;
-  category?: string;
+  category: "raw" | "cooked" | "packed";
   description?: string;
   address?: string;
   latitude?: string;
@@ -171,15 +176,42 @@ export async function createDonation(data: {
     throw new Error("Not authenticated");
   }
 
+  let expiresAt: Date;
+
+  if (data.category === "cooked") {
+    if (!data.preparedTime) {
+      throw new Error("Prepared time is required for cooked food");
+    }
+
+    let prepared = new Date(data.preparedTime);
+    if (isNaN(prepared.getTime())) {
+      throw new Error("Invalid prepared time");
+    }
+    expiresAt = new Date(prepared.getTime() + 6 * 60 * 60 * 1000);
+  } else {
+    if (!data.expiryInput) {
+      throw new Error("Expiry date required");
+    }
+
+    expiresAt = new Date(data.expiryInput);
+    if (isNaN(expiresAt.getTime())) {
+      throw new Error("Invalid expiry date");
+    }
+  }
+
   const newDonation = await db
     .insert(donation)
     .values({
       donorId: user.id,
       mealName: data.mealName,
-      preparedTime: data.preparedTime,
+      preparedTime:
+        data.category === "cooked"
+          ? new Date(data.preparedTime!)
+          : null,
       quantity: data.quantity,
+      category: data.category,
+      expiresAt,
       type: data.type || null,
-      category: data.category || null,
       description: data.description || null,
       address: data.address || null,
       latitude: data.latitude || null,
@@ -234,22 +266,22 @@ export async function acceptDonation(donationId: string) {
   }
 
   // Create accepted donation record
-const accepted = await db
-  .insert(acceptedDonation)
-  .values({
-    donationId: donationId,
-    receiverId: user.id,
-    status: "accepted",
-  })
-  .returning();
+  const accepted = await db
+    .insert(acceptedDonation)
+    .values({
+      donationId: donationId,
+      receiverId: user.id,
+      status: "accepted",
+    })
+    .returning();
 
-//update donation status
-await db
-  .update(donation)
-  .set({ status: "accepted" })
-  .where(eq(donation.donationId, donationId));
+  //update donation status
+  await db
+    .update(donation)
+    .set({ status: "accepted" })
+    .where(eq(donation.donationId, donationId));
 
-return accepted[0];
+  return accepted[0];
 
 }
 
@@ -438,7 +470,7 @@ export async function getDonorAcceptedRequests() {
     .from(donation)
     .innerJoin(
       acceptedDonation,
-        eq(acceptedDonation.donationId, donation.donationId)
+      eq(acceptedDonation.donationId, donation.donationId)
     )
     .innerJoin(
       userTable,

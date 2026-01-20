@@ -23,9 +23,9 @@ const RawFoodFields = ({ formData, setFormData}) => {
         Use Before <span className="text-red-500">*</span>
     </label>
     <input
-        name="useBefore"
+        name="expiryInput"
         type='datetime-local'
-        value={formData}
+        value={formData.expiryInput}
         onChange={handleChange}
       />
         <label className="block text-sm font-semibold mb-2 text-slate-900">

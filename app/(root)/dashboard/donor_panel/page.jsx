@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from 'react';
-import {  Package, Plus, Clock, MapPin, Users } from 'lucide-react';
+import { Package, Plus, Clock, MapPin, Users, MessageCircleWarning } from 'lucide-react';
 import { getDonorDonations } from '@/app/actions/donations';
 import { signOut, useSession } from '@/lib/auth-client';
 import { useRouter } from 'next/navigation';
@@ -282,8 +282,26 @@ export default function DonorDashboard() {
                           )}
 
                           <div className="flex items-center gap-1">
-                            <Clock className="w-4 h-4" />
-                            Prepared {formatDateTime(donation.preparedTime)}
+                            {donation.preparedTime ? (
+                              <div className='flex items-center gap-2'>
+                                <Clock className="w-4 h-4" />
+                                Prepared on {formatDateTime(donation.preparedTime)}
+                              </div>
+                            ) : (
+                              <div className='flex gap-2 items-center'>
+                                <MessageCircleWarning className="w-4 h-4" />
+                                {donation.category === "raw" ? (
+                                  <div>
+                                    Use before {formatDateTime(donation.expiresAt)}
+                                  </div>
+                                ) : (
+                                  <div>
+                                    Expires on {formatDateTime(donation.expiresAt)}
+                                  </div>
+                                )
+                              }
+                              </div>
+                            )}
                           </div>
 
                           {(donation.type || donation.category) && (
