@@ -42,7 +42,7 @@ const FoodListPage = () => {
     return date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' });
   };
 
-    const formatDateTime = (dateString) => {
+  const formatDateTime = (dateString) => {
     if (!dateString) return '';
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -146,8 +146,8 @@ const FoodListPage = () => {
                     <button
                       onClick={() => setFilterStatus('all')}
                       className={`px-4 py-3 rounded-xl font-medium transition-all ${filterStatus === 'all'
-                          ? 'bg-emerald-500 text-white shadow-md'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-emerald-500 text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
                     >
                       All
@@ -155,8 +155,8 @@ const FoodListPage = () => {
                     <button
                       onClick={() => setFilterStatus('available')}
                       className={`px-4 py-3 rounded-xl font-medium transition-all ${filterStatus === 'available'
-                          ? 'bg-emerald-500 text-white shadow-md'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-emerald-500 text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
                     >
                       Available
@@ -164,8 +164,8 @@ const FoodListPage = () => {
                     <button
                       onClick={() => setFilterStatus('claimed')}
                       className={`px-4 py-3 rounded-xl font-medium transition-all ${filterStatus === 'claimed'
-                          ? 'bg-emerald-500 text-white shadow-md'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-emerald-500 text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
                     >
                       Claimed
@@ -173,8 +173,8 @@ const FoodListPage = () => {
                     <button
                       onClick={() => setFilterStatus('completed')}
                       className={`px-4 py-3 rounded-xl font-medium transition-all ${filterStatus === 'completed'
-                          ? 'bg-emerald-500 text-white shadow-md'
-                          : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
+                        ? 'bg-emerald-500 text-white shadow-md'
+                        : 'bg-slate-100 text-slate-600 hover:bg-slate-200'
                         }`}
                     >
                       Completed
@@ -188,107 +188,119 @@ const FoodListPage = () => {
                 {filteredDonations.map((donation) => (
                   <div
                     key={donation.id}
-                    className="bg-white rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg transition-all overflow-hidden group"
+                    className="bg-white rounded-2xl relative border border-slate-200 shadow-sm hover:shadow-lg transition-all overflow-hidden group"
                   >
-                    {/* Card Header */}
-                    <div className="p-6 border-b border-slate-100">
-                      <div className="flex items-start justify-between mb-3">
-                        <div className="flex items-start gap-4">
-                          <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${donation.status === 'available' ? 'bg-emerald-100' :
+
+                    {donation.status === "expired" && (
+                      <span className=" absolute top-4 right-4 z-10 px-3 py-1 rounded-full text-xs font-semibold bg-red-100 text-red-700">
+                        EXPIRED
+                      </span>
+                    )}
+
+
+                    <div className={donation.status === "expired" ? "opacity-50 grayscale" : ""}>
+                      {/* Card Header */}
+                      <div className="p-6 border-b border-slate-100">
+                        <div className="flex items-start justify-between mb-3">
+                          <div className="flex items-start gap-4">
+                            <div className={`w-14 h-14 rounded-xl flex items-center justify-center shrink-0 ${donation.status === 'available' ? 'bg-emerald-100' :
                               donation.status === 'claimed' ? 'bg-orange-100' :
                                 'bg-slate-100'
-                            }`}>
-                            <Package className={`w-7 h-7 ${donation.status === 'available' ? 'text-emerald-600' :
+                              }`}>
+                              <Package className={`w-7 h-7 ${donation.status === 'available' ? 'text-emerald-600' :
                                 donation.status === 'claimed' ? 'text-orange-600' :
                                   'text-slate-600'
-                              }`} />
-                          </div>
-                          <div>
-                            <h3 className="text-xl font-bold text-slate-900 mb-1">
-                              {donation.mealName}
-                            </h3>
-                            <div className="flex items-center gap-2">
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${donation.status === 'available' ? 'bg-emerald-100 text-emerald-700' :
+                                }`} />
+                            </div>
+                            <div>
+                              <h3 className="text-xl font-bold text-slate-900 mb-1">
+                                {donation.mealName}
+                              </h3>
+                              <div className="flex items-center gap-2">
+                                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${donation.status === 'available' ? 'bg-emerald-100 text-emerald-700' :
                                   donation.status === 'claimed' ? 'bg-orange-100 text-orange-700' :
                                     'bg-slate-100 text-slate-700'
-                                }`}>
-                                {donation.status.toUpperCase()}
-                              </span>
-                              <span className="text-sm text-slate-500">
-                                {donation.type} • {donation.category}
-                              </span>
+                                  }`}>
+                                  {donation.status.toUpperCase()}
+                                </span>
+                                <span className="text-sm text-slate-500">
+                                  {donation.type} • {donation.category}
+                                </span>
+                              </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
 
-                    {/* Card Body */}
-                    <div className="p-6 space-y-4">
-                      <p className="text-slate-700">{donation.description}</p>
+                      {/* Card Body */}
+                      <div className="p-6 space-y-4">
+                        <p className="text-slate-700">{donation.description}</p>
 
-                      <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
-                        <div>
-                          <p className="text-xs text-slate-500 mb-1">Quantity</p>
-                          <p className="text-lg font-semibold text-slate-900">{donation.quantity} servings</p>
+                        <div className="grid grid-cols-2 gap-4 pt-4 border-t border-slate-100">
+                          <div>
+                            <p className="text-xs text-slate-500 mb-1">Quantity</p>
+                            <p className="text-lg font-semibold text-slate-900">{donation.quantity} servings</p>
+                          </div>
+                          <div>
+                            <p className="text-xs text-slate-500 mb-1">Listed on</p>
+                            <p className="text-lg font-semibold text-slate-900">{formatDate(donation.createdAt)}</p>
+                          </div>
                         </div>
-                        <div>
-                          <p className="text-xs text-slate-500 mb-1">Listed on</p>
-                          <p className="text-lg font-semibold text-slate-900">{formatDate(donation.createdAt)}</p>
+
+                        <div className="space-y-2 pt-2">
+                          <div className="flex items-center gap-2 text-sm text-slate-600">
+                            <MapPin className="w-4 h-4 text-slate-400" />
+                            <span className="truncate">{donation.address}</span>
+                          </div>
+                          <div className="flex items-center gap-5 text-sm text-slate-600">
+                            {donation.preparedTime && (
+                              <div className='flex gap-2'>
+                                <Clock className="w-4 h-4 text-slate-400" />
+                                <span>Prepared: {formatDateTime(donation.preparedTime)}</span>
+                              </div>
+                            )}
+                            {donation.expiresAt && (
+                              <div className='flex gap-2'>
+                                <MessageCircleWarning className="w-4 h-4 text-slate-400" />
+                                {donation.category === "raw" ? (
+                                  <div>
+                                    Use before {formatDateTime(donation.expiresAt)}
+                                  </div>
+                                ) : (
+                                  <div>
+                                    Expires on {formatDateTime(donation.expiresAt)}
+                                  </div>
+                                )
+                                }
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
 
-                      <div className="space-y-2 pt-2">
-                        <div className="flex items-center gap-2 text-sm text-slate-600">
-                          <MapPin className="w-4 h-4 text-slate-400" />
-                          <span className="truncate">{donation.address}</span>
-                        </div>
-                        <div className="flex items-center gap-2 text-sm text-slate-600">
-                          {donation.preparedTime && (
-                            <div className='flex gap-2'>
-                              <Clock className="w-4 h-4 text-slate-400" />
-                              <span>Prepared: {formatDateTime(donation.preparedTime)}</span>
-                            </div>
-                          )}
-                          {donation.expiresAt && (
-                            <div className='flex gap-2'>
-                              <MessageCircleWarning className="w-4 h-4 text-slate-400" />
-                 {donation.category === "raw" ? (
-                <div>
-                   Use before {formatDateTime(donation.expiresAt)}
-                </div>
-              ) : (
-                <div>
-                  Expires on {formatDateTime(donation.expiresAt)}
-                </div>
-              )
-             }
-                            </div>
-                          )}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Card Footer - Actions */}
-                    <div className="p-6 bg-slate-50 border-t border-slate-100 flex gap-3">
-                      <button
-                        onClick={() => handleEdit(donation)}
-                        disabled={donation.status === 'completed'}
-                        className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${donation.status === 'completed'
+                      {/* Card Footer - Actions */}
+                      <div className="p-6 bg-slate-50 border-t border-slate-100 flex gap-3">
+                        <button
+                          onClick={() => handleEdit(donation)}
+                          disabled={donation.status === 'completed' || donation.status === 'expired'}
+                          className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all ${donation.status === 'completed' || donation.status === 'expired'
                             ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
                             : 'bg-white border border-slate-200 text-slate-700 hover:border-emerald-500 hover:text-emerald-600 hover:bg-emerald-50'
-                          }`}
-                      >
-                        <Edit2 className="w-4 h-4" />
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => setDeleteConfirm(donation.id)}
-                        className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all bg-white border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-500"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                        Delete
-                      </button>
+                            }`}
+                        >
+                          <Edit2 className="w-4 h-4" />
+                          Edit
+                        </button>
+                        {donation.status !== 'expired' && donation.status !== 'completed' && (
+                        <button
+                          onClick={() => setDeleteConfirm(donation.id)}
+                          className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-medium transition-all bg-white border border-red-200 text-red-600 hover:bg-red-50 hover:border-red-500"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                          Delete
+                        </button>
+                        )}
+                      </div>
                     </div>
                   </div>
                 ))}

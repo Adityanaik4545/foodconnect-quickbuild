@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { db } from "@/drizzle/db";
 import { donation, acceptedDonation, userProfile, user as userTable } from "@/drizzle/schema";
 
-import { eq, desc, and, or } from "drizzle-orm";
+import { eq, desc, and, or, lt, gt } from "drizzle-orm";
 import { headers } from "next/headers";
 
 // Get all donations for a donor
@@ -15,6 +15,8 @@ export async function getDonorDonations() {
   if (!user?.id) {
     throw new Error("Not authenticated");
   }
+
+  await expireOldDonations();
 
   //Get donor donations
   const donations = await db
@@ -78,6 +80,8 @@ export async function getAvailableDonations() {
     throw new Error("Not authenticated");
   }
 
+  await expireOldDonations();
+
   // Get user's location if available
   const profile = await db
     .select()
@@ -88,7 +92,12 @@ export async function getAvailableDonations() {
   const donationsResult = await db
     .select()
     .from(donation)
-    .where(eq(donation.status, "available"))
+    .where(
+      and(
+        eq(donation.status, "available"),
+        gt(donation.expiresAt, new Date())
+      )
+    )
     .orderBy(desc(donation.createdAt));
 
   // Get user names for all donors
@@ -516,6 +525,18 @@ export async function confirmPickup(acceptedId: string) {
     .where(eq(donation.donationId, record.donationId));
 
   return { success: true };
+}
+
+export async function expireOldDonations() {
+  await db
+    .update(donation)
+    .set({ status: "expired" })
+    .where(
+      and(
+        eq(donation.status, "available"),
+        lt(donation.expiresAt, new Date())
+      )
+    );
 }
 
 
