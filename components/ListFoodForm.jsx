@@ -8,6 +8,7 @@ import RawFoodFields from './RawFoodFields';
 import CookedFields from './CookedFields';
 import PackedFields from './PackedFields';
 import LocationFields from './LocationFields';
+import Image from 'next/image';
 
 export default function ListFoodForm({ onClose }) {
   const [formData, setFormData] = useState({
@@ -96,11 +97,11 @@ export default function ListFoodForm({ onClose }) {
 
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
-        <div className="sticky top-0 bg-white border-b border-slate-200 p-6 flex items-center justify-between">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center  z-50 p-4">
+      <div className="bg-white rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] px-2 overflow-y-auto scrollbar-hide">
+        <div className="sticky top-0 bg-white border-b border-slate-200 p-6 pb-0 flex items-center justify-between">
           <div>
-            <h2 className="text-2xl font-bold text-slate-900">List Food Donation</h2>
+            <Image src="/assets/logo/app_logo.png" width={100} height={20} alt='logo'/>
             <p className="text-sm text-slate-600 mt-1">Share your food with those in need</p>
           </div>
           <button
@@ -111,7 +112,7 @@ export default function ListFoodForm({ onClose }) {
           </button>
         </div>
 
-        <form onSubmit={handleSubmit} className="p-6 space-y-6">
+        <form onSubmit={handleSubmit} className=" space-y-6">
           {error && (
             <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl">
               {error}
@@ -280,7 +281,7 @@ export default function ListFoodForm({ onClose }) {
 
 
           {/* ACTION BUTTONS */}
-          <div className="flex gap-4 pt-4 border-t border-slate-200">
+          <div className="flex gap-4 p-3 border-t border-slate-200 sticky bottom-0">
 
             {/* STEP 1 → NO ACTION BUTTONS */}
             {step === 1 && (

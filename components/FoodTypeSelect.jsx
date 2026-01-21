@@ -4,7 +4,7 @@ const FoodTypeSelect = ({onSelect}) => {
   return (
     <>
       <div className="space-y-6">
-    <h3 className="text-lg font-semibold text-slate-900">
+    <h3 className="text-lg font-semibold text-slate-900 pt-3">
       What kind of food do you want to donate?
     </h3>
 
